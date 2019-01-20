@@ -4,7 +4,9 @@ public class InventoryUi : MonoBehaviour
 {
     public TMPro.TextMeshProUGUI title;
     public GameObject inventoryUI; 
-    public Transform itemsParent; 
+    public Transform itemsParent;
+
+    public GameObject inventorySlotPreFab;
 
     public void onOpenInventory(Inventory inventory)
     {
@@ -20,18 +22,16 @@ public class InventoryUi : MonoBehaviour
 
     public void UpdateUI(Inventory inventory)
     {
-        InventorySlot[] slots = GetComponentsInChildren<InventorySlot>();
-
-        for (int i = 0; i < slots.Length; i++)
+        foreach (Transform child in transform)
         {
-            if (i < inventory.items.Count)
-            {
-                slots[i].AddItem(inventory.items[i]);
-            }
-            else
-            {
-                slots[i].ClearSlot();
-            }
+            Destroy(child.gameObject);
+        }
+
+        for (int i = 0; i < inventory.items.Count; i++)
+        {
+
+            InventorySlot slot = Instantiate(inventorySlotPreFab, transform).GetComponent<InventorySlot>();
+            slot.AddItem(inventory.items[i]);
         }
     }
 }
