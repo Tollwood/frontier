@@ -5,6 +5,7 @@ public class Inventory : MonoBehaviour
 {
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;
+    public new string name = "Inventory";
 
     public int space = 10;  // Amount of item spaces
 

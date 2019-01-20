@@ -6,6 +6,8 @@ TagManager:
   tags:
   - InteractionHint
   - playerInventory
+  - primaryInventoryUi
+  - secondaryInventoryUi
   layers:
   - Default
   - TransparentFX

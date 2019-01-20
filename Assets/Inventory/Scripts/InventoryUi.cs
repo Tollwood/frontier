@@ -2,35 +2,20 @@
 
 public class InventoryUi : MonoBehaviour
 {
-    public KeyCode inventoryKeyCode = KeyCode.I;
+    public TMPro.TextMeshProUGUI title;
     public GameObject inventoryUI; 
     public Transform itemsParent; 
 
-    void Update()
-    {
-        if (Input.GetKeyDown(inventoryKeyCode))
-        {
-            inventoryUI.SetActive(!inventoryUI.activeSelf);
-            if (inventoryUI.activeSelf)
-            {
-                //freeze Camera
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                //rotate Camera
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-
-            onOpenInventory(GameObject.FindWithTag("playerInventory").GetComponent<Inventory>());
-        }
-    }
-
     public void onOpenInventory(Inventory inventory)
     {
+        inventoryUI.gameObject.SetActive(true);
+        title.text = inventory.name;
         UpdateUI(inventory);
+    }
+
+    public void OnCloseInventory()
+    {
+        inventoryUI.gameObject.SetActive(false);
     }
 
     public void UpdateUI(Inventory inventory)

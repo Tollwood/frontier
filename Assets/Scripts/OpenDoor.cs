@@ -11,6 +11,11 @@ public class OpenDoor : Interactable
 
     private bool interactable = true;
 
+    public override string hint()
+    {
+        return "Open door";
+    }
+
     public override void Interact()
     {
         base.Interact();
