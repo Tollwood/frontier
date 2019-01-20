@@ -3,32 +3,40 @@
 public class InteractionController : MonoBehaviour
 {
 
-    float distance = 0.9f;
+    public Camera cam;
+    public float distance = 10f;
+    public KeyCode key = KeyCode.E;
+    public TMPro.TextMeshProUGUI hint;
 
-    // Update is called once per frame
     void Update()
     {
         RaycastHit hit;
-        // Does the ray intersect any objects excluding the player layer
-        Vector3 direction = transform.TransformDirection(Vector3.forward * distance);
-        Ray ray = new Ray(transform.position, direction);
-        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, distance) && Input.GetKeyDown(KeyCode.E))
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, distance))
         {
-            Debug.Log("Did Hit: "+ hit.collider.name);
+
             Interactable interactable = hit.collider.transform.GetComponent<Interactable>();
             if(interactable != null){
-                interactable.Interact();
-                Debug.DrawRay(ray.origin,ray.direction, Color.green);
+                hint.text = "Press ("+ key.ToString()+ ") " + interactable.hint();
+                if (Input.GetKeyDown(KeyCode.E)){
+                    interactable.Interact();
+                    Debug.DrawRay(ray.origin, ray.direction, Color.green);
+                }
+                else
+                {
+                    Debug.DrawRay(ray.origin, ray.direction, Color.yellow);
+                }
             }
-            else {
-                Debug.DrawRay(ray.origin, ray.direction, Color.yellow);
+            else
+            {
+                hint.text = "";
             }
         }
         else
         {
-            Debug.DrawRay(ray.origin, ray.direction, Color.white);
-            Debug.Log("Did not Hit");
+            Debug.DrawRay(ray.origin, ray.direction * distance, Color.white);
+            hint.text = "";
         }
+
     }
 }
