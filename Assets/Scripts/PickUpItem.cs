@@ -12,8 +12,12 @@ public class PickUpItem : Interactable
     public override void Interact()
     {
         Inventory playerInventory =  GameObject.FindWithTag("playerInventory").GetComponent<Inventory>();
-        playerInventory.Add(item);
-        Destroy(transform.gameObject);
+        bool pickedUp = playerInventory.Add(item);
+        if (pickedUp)
+        {
+            Destroy(transform.gameObject);
+        }
+
     }
 
 }
