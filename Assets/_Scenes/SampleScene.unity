@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657856, g: 0.49641234, b: 0.57481724, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -248,6 +248,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: playerInventory
+      objectReference: {fileID: 0}
+    - target: {fileID: 1397966647925992822, guid: 960f6ce8f98d247209c497d55c7c6cea,
+        type: 3}
+      propertyPath: space
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 960f6ce8f98d247209c497d55c7c6cea, type: 3}
@@ -504,6 +509,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
+        type: 3}
+      propertyPath: m_text
+      value: Horse
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 27.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7773330293240412090, guid: 38aca972e647a4418b71225efb30b524,
         type: 3}
@@ -1145,46 +1190,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SecondayInventoryTitle
       objectReference: {fileID: 0}
-    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
-        type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
-        type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
-        type: 3}
-      propertyPath: m_text
-      value: Horse
-      objectReference: {fileID: 0}
-    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
-        type: 3}
-      propertyPath: m_fontSize
-      value: 27.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7773330295169558861, guid: 38aca972e647a4418b71225efb30b524, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 38aca972e647a4418b71225efb30b524, type: 3}
@@ -1701,7 +1706,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Stagecoach Inventory
-  space: 10
+  space: 20
   items: []
 --- !u!65 &1112688903
 BoxCollider:
@@ -1745,6 +1750,8 @@ MonoBehaviour:
   title: {fileID: 391899492}
   inventoryUI: {fileID: 526269946}
   itemsParent: {fileID: 1942887053}
+  itemSlotsPrefab: {fileID: 7748809463729408986, guid: 5f43a2989fe07414e9147e24f2b9c117,
+    type: 3}
 --- !u!1 &1724385274 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1195331487883156, guid: e72121a7df4802c4ab486fd94cb370ed,
@@ -2247,6 +2254,22 @@ PrefabInstance:
       propertyPath: title
       value: 
       objectReference: {fileID: 614792531}
+    - target: {fileID: 7773330295169558861, guid: 38aca972e647a4418b71225efb30b524,
+        type: 3}
+      propertyPath: itemSlotsPrefab
+      value: 
+      objectReference: {fileID: 7748809463729408986, guid: 5f43a2989fe07414e9147e24f2b9c117,
+        type: 3}
+    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
+        type: 3}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
+        type: 3}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7773330293240412090, guid: 38aca972e647a4418b71225efb30b524,
         type: 3}
       propertyPath: m_IsActive
@@ -2866,16 +2889,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PrimaryInventoryTitle
-      objectReference: {fileID: 0}
-    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
-        type: 3}
-      propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7773330294367545499, guid: 38aca972e647a4418b71225efb30b524,
-        type: 3}
-      propertyPath: m_isInputParsingRequired
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38aca972e647a4418b71225efb30b524, type: 3}
