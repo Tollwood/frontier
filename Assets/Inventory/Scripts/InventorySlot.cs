@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /* Sits on all InventorySlots. */
@@ -7,27 +9,24 @@ public class InventorySlot : MonoBehaviour
 {
 
     public Image icon;
-    public Button removeButton;
 
-    Item item;  // Current item in the slot
+    public Item item { get; private set; }  // Current item in the slot
+
+    public int index;
+    public Inventory inventory;
+
 
     // Add item to the slot
     public void AddItem(Item newItem)
     {
+        if(newItem == null)
+        {
+            return;
+        }
+        //set in inventory
         item = newItem;
-
         icon.sprite = item.icon;
-        icon.enabled = true;
-        removeButton.interactable = true;
+        icon.gameObject.SetActive(true);
     }
 
-    // Clear the slot
-    public void ClearSlot()
-    {
-        item = null;
-
-        icon.sprite = null;
-        icon.enabled = false;
-        removeButton.interactable = false;
-    }
 }
