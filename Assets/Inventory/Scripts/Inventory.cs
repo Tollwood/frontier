@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
@@ -18,10 +16,9 @@ public class Inventory : MonoBehaviour
         items = new Item[space];
     }
 
-    // Add a new item if enough room
     public bool Add(Item item)
     {
-        int? freeIndex = GetFreeIndex();
+        int? freeIndex = GetFreeIndex(item);
         if (freeIndex == null)
         {
             Debug.Log("Not enough room.");
@@ -30,28 +27,41 @@ public class Inventory : MonoBehaviour
         return Add(item, freeIndex.Value);
     }
     public bool Add(Item item, int index) {
-
-        if(items[index] != null)
+        Item inventoryItem = items[index];
+        if (inventoryItem != null && inventoryItem.name == item.name)
+        {
+            inventoryItem.amount += item.amount;
+        }
+        else if (inventoryItem != null)
         {
             Debug.Log("Slot already taken");
             return false;
         }
-        items[index] = item;
+        else
+        {
+            items[index] = item;
+        }
         if (onItemChangedCallback != null)
             onItemChangedCallback.Invoke();
 
         return true;
     }
 
-    private int? GetFreeIndex()
+    private int? GetFreeIndex(Item item)
     {
-        for(int i = 0; i< items.Length; i++){
-            if(items[i] == null)
+        int? emptyIndex = null;
+        for (int i = 0; i < items.Length; i++) {
+            Item inventoryItem = items[i];
+            if (emptyIndex == null && inventoryItem == null)
+            {
+                emptyIndex = i;
+            }
+            if (inventoryItem != null && inventoryItem.name == item.name)
             {
                 return i;
             }
         }
-        return null;
+        return emptyIndex;
     }
 
     // Remove an item

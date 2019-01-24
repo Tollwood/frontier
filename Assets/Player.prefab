@@ -4854,6 +4854,7 @@ GameObject:
   - component: {fileID: 1991501530}
   - component: {fileID: 1991501529}
   - component: {fileID: 1991501528}
+  - component: {fileID: 998170767}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5010,6 +5011,20 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &998170767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991501527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 541b25aeb49bc4e4c95ec36847e51fbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryKeyCode: 105
+  mainInventoryUi: {fileID: 0}
 --- !u!1 &2001895590
 GameObject:
   m_ObjectHideFlags: 0
@@ -5299,7 +5314,7 @@ GameObject:
   - component: {fileID: 1397966647925992822}
   m_Layer: 0
   m_Name: Inventory
-  m_TagString: Untagged
+  m_TagString: playerInventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5330,5 +5345,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abf8bf0f7df74440ba037bd143fb798b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  space: 20
+  name: Inventory
+  space: 5
   items: []

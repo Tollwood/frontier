@@ -7,5 +7,17 @@ public class Item : ScriptableObject {
 
     public new string name = "New Item";    // Name of the item
     public Sprite icon = null;              // Item icon
+    public int amount;
 
+
+    public Item Clone()
+    {
+        Item clonedItem = new Item
+        {
+            name = this.name,
+            icon = this.icon,
+            amount = this.amount
+        };
+        return clonedItem;
+    } 
 }

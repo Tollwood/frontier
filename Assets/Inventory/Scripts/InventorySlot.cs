@@ -1,6 +1,5 @@
-﻿using System;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /* Sits on all InventorySlots. */
@@ -9,6 +8,7 @@ public class InventorySlot : MonoBehaviour
 {
 
     public Image icon;
+    public TextMeshProUGUI amountText;
 
     public Item item { get; private set; }  // Current item in the slot
 
@@ -22,6 +22,12 @@ public class InventorySlot : MonoBehaviour
         if(newItem == null)
         {
             return;
+        }
+
+        if(newItem.amount > 1)
+        {
+            amountText.gameObject.SetActive(true);
+            amountText.text = newItem.amount + "";
         }
         //set in inventory
         item = newItem;

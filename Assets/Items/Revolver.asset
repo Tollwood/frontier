@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: Revolver
   m_EditorClassIdentifier: 
   name: Revolver
-  icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  showInInventory: 1
+  icon: {fileID: 21300000, guid: 571b87d2e3bab45cbafccaacba78848c, type: 3}
