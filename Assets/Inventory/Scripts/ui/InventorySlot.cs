@@ -2,37 +2,37 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/* Sits on all InventorySlots. */
-
 public class InventorySlot : MonoBehaviour
 {
-
     public Image icon;
     public TextMeshProUGUI amountText;
 
     public Item item { get; private set; }  // Current item in the slot
 
-    public int index;
+    internal int index;
     public Inventory inventory;
 
-
-    // Add item to the slot
-    public void AddItem(Item newItem)
+    public void init(Inventory inventory, int index)
     {
-        if(newItem == null)
+        this.name = inventory.name + "-slot-" + index;
+        this.inventory = inventory;
+        this.index = index;
+        item = inventory.items[index];
+        if ( item== null)
         {
             return;
         }
-
-        if(newItem.amount > 1)
+        if(item.amount > 1)
         {
             amountText.gameObject.SetActive(true);
-            amountText.text = newItem.amount + "";
+            amountText.text = item.amount + "";
         }
-        //set in inventory
-        item = newItem;
         icon.sprite = item.icon;
         icon.gameObject.SetActive(true);
     }
 
+    public bool IsEmpty()
+    {
+        return item == null;
+    }
 }

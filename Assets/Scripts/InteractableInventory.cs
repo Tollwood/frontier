@@ -29,8 +29,8 @@ public class InteractableInventory : Interactable
         isOpen = !isOpen;
         if (isOpen)
         {
-            primaryInventoryUi.onOpenInventory(playerInventory);
-            secondaryInventoryUI.onOpenInventory(inventory);
+            primaryInventoryUi.OnOpenInventory(playerInventory);
+            secondaryInventoryUI.OnOpenInventory(inventory);
         }
         else
         {

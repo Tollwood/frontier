@@ -20,4 +20,9 @@ public class Item : ScriptableObject {
         };
         return clonedItem;
     } 
+
+    public bool SameIcon(Item item)
+    {
+        return item != null && item.name == this.name;
+    }
 }

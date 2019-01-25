@@ -137,12 +137,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1701235731955097420}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4b71381ac087454c8c6bacd0413d6af, type: 3}
+  m_Script: {fileID: 11500000, guid: 84d6f1217387f48f08421643b8d82f66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 1701235731845034276}
   amountText: {fileID: 6273367648966936989}
-  index: 0
   inventory: {fileID: 0}
 --- !u!222 &5214958020656449681
 CanvasRenderer:
@@ -190,7 +189,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1701235731955097420}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9174de6dbffa4476683aa5ffdd5494cf, type: 3}
+  m_Script: {fileID: 11500000, guid: eb212700226bf4787a681bc689e38ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3222134232461134924
@@ -335,7 +334,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}

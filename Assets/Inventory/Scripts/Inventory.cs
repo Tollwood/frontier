@@ -18,7 +18,7 @@ public class Inventory : MonoBehaviour
 
     public bool Add(Item item)
     {
-        int? freeIndex = GetFreeIndex(item);
+        int? freeIndex = GetIndex(item);
         if (freeIndex == null)
         {
             Debug.Log("Not enough room.");
@@ -26,13 +26,14 @@ public class Inventory : MonoBehaviour
         }
         return Add(item, freeIndex.Value);
     }
+
     public bool Add(Item item, int index) {
         Item inventoryItem = items[index];
-        if (inventoryItem != null && inventoryItem.name == item.name)
+        if (item.SameIcon(inventoryItem))
         {
             inventoryItem.amount += item.amount;
         }
-        else if (inventoryItem != null)
+        else if (!FreeSlot(index))
         {
             Debug.Log("Slot already taken");
             return false;
@@ -47,46 +48,40 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    private int? GetFreeIndex(Item item)
+    private int? GetIndex(Item item)
     {
         int? emptyIndex = null;
-        for (int i = 0; i < items.Length; i++) {
-            Item inventoryItem = items[i];
+        for (int index = 0; index < items.Length; index++) {
+            Item inventoryItem = items[index];
             if (emptyIndex == null && inventoryItem == null)
             {
-                emptyIndex = i;
+                emptyIndex = index;
             }
-            if (inventoryItem != null && inventoryItem.name == item.name)
-            {
-                return i;
-            }
+            if( item.SameIcon(inventoryItem))
+                return index;
         }
         return emptyIndex;
     }
 
     // Remove an item
-    public void Remove(Item item)
+    public void Remove(int index)
     {
-
-        for(int i = 0; i<items.Length; i++)
-        {
-            if (item.Equals(items[i]))
-            {
-                items[i] = null;
-                break;
-            }
-        }
+        items[index] = null;
         if (onItemChangedCallback != null)
             onItemChangedCallback.Invoke();
     }
 
     internal void SwapItem(int fromIndex, int toIndex)
     {
-
         Item tmpItem = items[toIndex];
         items[toIndex] = items[fromIndex];
         items[fromIndex] = tmpItem;
         if (onItemChangedCallback != null)
             onItemChangedCallback.Invoke();
+    }
+
+    private bool FreeSlot(int index)
+    {
+        return items[index] == null;
     }
 }

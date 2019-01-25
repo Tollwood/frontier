@@ -14,6 +14,7 @@ public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private Transform iconTransform;
     bool isDragable;
+
     private void Start()
     {
         canvas = GameObject.FindWithTag("canvas").transform;
@@ -22,15 +23,13 @@ public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        isDragable = inventorySlot.item != null;
+        isDragable = !inventorySlot.IsEmpty();
         if (isDragable)
         {
             iconTransform = inventorySlot.icon.transform;
             startPosition = iconTransform.position;
             startParent = iconTransform.parent;
-            iconTransform.parent = canvas;
-            iconTransform.SetAsLastSibling();
-            iconTransform.GetComponent<CanvasGroup>().blocksRaycasts = false;
+            RenderOnTop();
         }
     }
 
@@ -59,15 +58,14 @@ public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnDrop(PointerEventData eventData)
     {
-
-        Debug.Log("DripDrop");
-        if (inventorySlot.item != null)
+        if (!inventorySlot.IsEmpty())
         {
             Debug.Log("cant drop item, slot is already taken");
             return;
         }
-        InventorySlot originSlot = eventData.pointerDrag.GetComponent<ItemDragHandler>().inventorySlot;
-        originSlot.GetComponent<ItemDragHandler>().ResetIcon();
+        ItemDragHandler originDragHandler = eventData.pointerDrag.GetComponent<ItemDragHandler>();
+        InventorySlot originSlot = originDragHandler.inventorySlot;
+        originDragHandler.ResetIcon();
         if (originSlot.inventory.Equals(inventorySlot.inventory))
         {
             inventorySlot.inventory.SwapItem(originSlot.index, inventorySlot.index);
@@ -75,7 +73,14 @@ public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         else
         {
             inventorySlot.inventory.Add(originSlot.item, inventorySlot.index);
-            originSlot.inventory.Remove(originSlot.item);
+            originSlot.inventory.Remove(originSlot.index);
         }
     }
+
+    private void RenderOnTop() {
+        iconTransform.parent = canvas;
+        iconTransform.SetAsLastSibling();
+        iconTransform.GetComponent<CanvasGroup>().blocksRaycasts = false;
+    }
+
 }

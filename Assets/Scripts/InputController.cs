@@ -22,7 +22,7 @@ public class InputController : MonoBehaviour
             isOpen = !isOpen;
             if (isOpen)
             {
-                mainInventoryUi.onOpenInventory(primaryInventory);
+                mainInventoryUi.OnOpenInventory(primaryInventory);
                 //freeze Camera
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
