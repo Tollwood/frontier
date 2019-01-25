@@ -2512,7 +2512,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1147728572}
-  - component: {fileID: 1147728573}
   m_Layer: 0
   m_Name: Characters
   m_TagString: Untagged
@@ -2543,25 +2542,6 @@ Transform:
   m_Father: {fileID: 1991501534}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1147728573
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147728571}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 4837235d67e136e4b883adb2bafc73e8, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1153426306
 GameObject:
   m_ObjectHideFlags: 0
@@ -4856,6 +4836,7 @@ GameObject:
   - component: {fileID: 1991501529}
   - component: {fileID: 1991501528}
   - component: {fileID: 998170767}
+  - component: {fileID: 981486492}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5026,6 +5007,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryKeyCode: 105
   mainInventoryUi: {fileID: 0}
+--- !u!114 &981486492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991501527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 626f339bb60dd426f8762485ca4e9f1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rightHand: {fileID: 6952932035259600653}
+  equipment: {fileID: 11400000, guid: 2d3cf6e4d043f41cc931fa3108fc8dbc, type: 2}
 --- !u!1 &2001895590
 GameObject:
   m_ObjectHideFlags: 0
@@ -5346,7 +5341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abf8bf0f7df74440ba037bd143fb798b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Inventory
+  name: Player
   space: 5
   items: []
 --- !u!1 &7806363511060019473
