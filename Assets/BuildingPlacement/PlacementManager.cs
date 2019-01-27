@@ -70,8 +70,14 @@ public class PlacementManager : MonoBehaviour
     {
         if (placed)
         {
-            GameObject go = Instantiate(buildingPrefab, new Vector3(newBuilding.transform.position.x - planningOffset, newBuilding.transform.position.y, newBuilding.transform.position.z), newBuilding.transform.rotation);
-            go.AddComponent<MeshCollider>();
+            Ray ray = new Ray(new Vector3(newBuilding.transform.position.x - planningOffset, 3000, newBuilding.transform.position.z), Vector3.down);
+            RaycastHit hit;
+
+            if(Physics.Raycast(ray,out hit))
+            {
+                GameObject go = Instantiate(buildingPrefab, hit.point, newBuilding.transform.rotation);
+                go.AddComponent<MeshCollider>();
+            }
 
             newBuilding.transform.parent = null;
             Destroy(newBuilding.GetComponent<CollidingCheck>());
