@@ -1,11 +1,12 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof( Camera))]
 public class MapCameraController : MonoBehaviour
 {
-    public float minFov = 15f;
-    public float maxFov = 90f;
+
+    [Header("Zoom Settings")]
+    public float minSize = 30f;
+    public float maxSize = 120f;
     public float sensitivity = 10f;
 
     private Camera cam;
@@ -17,9 +18,15 @@ public class MapCameraController : MonoBehaviour
 
     public void Update()
     {
-        float fov =cam.fieldOfView;
-        fov += Input.GetAxis("Mouse ScrollWheel") * sensitivity;
-        fov = Mathf.Clamp(fov, minFov, maxFov);
-        cam.fieldOfView = fov;
+        HandleZoom();
+
+    }
+
+    private void HandleZoom()
+    {
+        float size = cam.orthographicSize;
+        size += Input.GetAxis("Mouse ScrollWheel") * sensitivity;
+        size = Mathf.Clamp(size, minSize, maxSize);
+        cam.orthographicSize = size;
     }
 }

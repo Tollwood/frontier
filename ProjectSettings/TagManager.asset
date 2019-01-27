@@ -9,6 +9,7 @@ TagManager:
   - primaryInventoryUi
   - secondaryInventoryUi
   - canvas
+  - planningModeCamera
   layers:
   - Default
   - TransparentFX
