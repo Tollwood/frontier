@@ -106,5 +106,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 328dc19a85c1740cbbaa7f07bca66463, type: 2}
-  totalAmount: 2
+  totalAmount: 6
   minAmount: 1
