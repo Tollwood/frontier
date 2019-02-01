@@ -15,8 +15,6 @@ public class InventoryUi : MonoBehaviour
         title.text = inventory.name;
         this.inventory = inventory;
         UpdateUI();
-        inventory.onItemChangedCallback -= UpdateUI;
-        inventory.onItemChangedCallback +=  UpdateUI;
     }
 
     public void OnCloseInventory()
@@ -29,9 +27,13 @@ public class InventoryUi : MonoBehaviour
         foreach(Transform child in itemsParent){
             Destroy(child.gameObject);
         }
-        for( int i = 0; i < inventory.space; i++){
-            InventorySlot slot = Instantiate(itemSlotsPrefab, itemsParent);
-            slot.init(inventory,i);
+        if(inventory != null)
+        {
+            for (int i = 0; i < inventory.space; i++)
+            {
+                InventorySlot slot = Instantiate(itemSlotsPrefab, itemsParent);
+                slot.init(inventory, i);
+            }
         }
     }
 }

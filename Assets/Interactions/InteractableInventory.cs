@@ -1,23 +1,19 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Inventory))]
 public class InteractableInventory : Interactable
 {
+    public int space;
 
-    Inventory inventory;
-
-    InventoryUi primaryInventoryUi;
-    InventoryUi secondaryInventoryUI;
-    Inventory playerInventory;
-
-    bool isOpen = false;
+    private InventoryManager inventoryManager;
+    private Inventory inventory;
+    private bool isOpen = false;
 
     private void Start()
     {
-        playerInventory = GameObject.FindWithTag("playerInventory").GetComponent<Inventory>();
-        primaryInventoryUi = GameObject.FindWithTag("primaryInventoryUi").GetComponent<InventoryUi>();
-        secondaryInventoryUI = GameObject.FindWithTag("secondaryInventoryUi").GetComponent<InventoryUi>();
-        inventory = transform.GetComponent<Inventory>();
+        inventoryManager = FindObjectOfType<InventoryManager>();
+        if(inventory == null)
+        inventory = inventoryManager.AddInventory(space);
+
     }
     public override string hint()
     {
@@ -28,14 +24,8 @@ public class InteractableInventory : Interactable
     {
         isOpen = !isOpen;
         if (isOpen)
-        {
-            primaryInventoryUi.OnOpenInventory(playerInventory);
-            secondaryInventoryUI.OnOpenInventory(inventory);
-        }
+            inventoryManager.OpenInventories(inventory.Id);
         else
-        {
-            primaryInventoryUi.OnCloseInventory();
-            secondaryInventoryUI.OnCloseInventory();
-        }
+            inventoryManager.CloseInventories();
     }
 }

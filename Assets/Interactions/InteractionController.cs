@@ -5,9 +5,9 @@ public class InteractionController : MonoBehaviour
 {
     public Camera cam;
     public float distance = 10f;
-    public TextMeshProUGUI hint;
-
+    private TextMeshProUGUI hint;
     private Interactable interactable;
+
     private void Start()
     {
         hint = GameObject.FindGameObjectWithTag("hint").GetComponent<TextMeshProUGUI>();

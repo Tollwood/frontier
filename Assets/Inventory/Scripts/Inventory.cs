@@ -1,18 +1,16 @@
 ﻿using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class Inventory
 {
-    public delegate void OnItemChanged();
-    public OnItemChanged onItemChangedCallback;
-    public new string name = "Inventory";
-
-    public int space = 10;  // Amount of item spaces
-
-    // Our current list of items in the inventory
+    public string name = "Inventory";
+    public string Id { get; private set; }
+    public int space;  // Amount of item spaces
     public Item[] items;
 
-    private void Awake()
+    public Inventory(string id, int space)
     {
+        this.Id = id;
+        this.space = space;
         items = new Item[space];
     }
 
@@ -42,9 +40,6 @@ public class Inventory : MonoBehaviour
         {
             items[index] = item;
         }
-        if (onItemChangedCallback != null)
-            onItemChangedCallback.Invoke();
-
         return true;
     }
 
@@ -64,20 +59,21 @@ public class Inventory : MonoBehaviour
     }
 
     // Remove an item
-    public void Remove(int index)
+    public bool Remove(int index)
     {
+        if (index >= items.Length)
+            return false;
+
         items[index] = null;
-        if (onItemChangedCallback != null)
-            onItemChangedCallback.Invoke();
+        return true;
     }
 
-    internal void SwapItem(int fromIndex, int toIndex)
+    public bool SwapItem(int fromIndex, int toIndex)
     {
         Item tmpItem = items[toIndex];
         items[toIndex] = items[fromIndex];
         items[fromIndex] = tmpItem;
-        if (onItemChangedCallback != null)
-            onItemChangedCallback.Invoke();
+        return true;
     }
 
     private bool FreeSlot(int index)

@@ -15,10 +15,13 @@ public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Transform iconTransform;
     bool isDragable;
 
+    private InventoryManager inventoryManager;
+
     private void Start()
     {
         canvas = GameObject.FindWithTag("canvas").transform;
         inventorySlot = GetComponent<InventorySlot>();
+        inventoryManager = FindObjectOfType<InventoryManager>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -66,15 +69,7 @@ public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         ItemDragHandler originDragHandler = eventData.pointerDrag.GetComponent<ItemDragHandler>();
         InventorySlot originSlot = originDragHandler.inventorySlot;
         originDragHandler.ResetIcon();
-        if (originSlot.inventory.Equals(inventorySlot.inventory))
-        {
-            inventorySlot.inventory.SwapItem(originSlot.index, inventorySlot.index);
-        }
-        else
-        {
-            inventorySlot.inventory.Add(originSlot.item, inventorySlot.index);
-            originSlot.inventory.Remove(originSlot.index);
-        }
+        inventoryManager.UpdateInventory(originSlot.inventory, inventorySlot.inventory, originSlot.index, inventorySlot.index);
     }
 
     private void RenderOnTop() {
