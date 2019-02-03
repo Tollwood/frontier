@@ -12,6 +12,8 @@ public class InventorySlot : MonoBehaviour
     internal int index;
     public Inventory inventory;
 
+    private EquipmentManager equipmentManager;
+
     public void init(Inventory inventory, int index)
     {
         this.name = inventory.name + "-slot-" + index;
@@ -31,8 +33,19 @@ public class InventorySlot : MonoBehaviour
         icon.gameObject.SetActive(true);
     }
 
+    private void Start()
+    {
+        equipmentManager = FindObjectOfType<EquipmentManager>();
+    }
+
     public bool IsEmpty()
     {
         return item == null;
+    }
+
+    public void Equip()
+    {
+        if (item is Equipment)
+            equipmentManager.Equip((Equipment)item);
     }
 }

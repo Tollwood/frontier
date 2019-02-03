@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4000012020745332}
   - component: {fileID: 33000014234705186}
   - component: {fileID: 23000013532756424}
+  - component: {fileID: 4496200354430123177}
   m_Layer: 0
   m_Name: Shovel
   m_TagString: Untagged
@@ -77,3 +78,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &4496200354430123177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010209671850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1913ac033217c498f8a66bf8c36c9c59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: 5ada1d7d6f25146b1befd69ad269a16a, type: 2}

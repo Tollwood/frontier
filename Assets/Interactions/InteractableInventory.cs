@@ -3,16 +3,14 @@
 public class InteractableInventory : Interactable
 {
     public int space;
+    public Item[] initialItems;
 
-    private InventoryManager inventoryManager;
     private Inventory inventory;
-    private bool isOpen = false;
 
     private void Start()
     {
-        inventoryManager = FindObjectOfType<InventoryManager>();
         if(inventory == null)
-        inventory = inventoryManager.AddInventory(space);
+        inventory = InventoryManager.Instance.AddInventory(space, name, initialItems);
 
     }
     public override string hint()
@@ -22,10 +20,6 @@ public class InteractableInventory : Interactable
 
     public override void Interact()
     {
-        isOpen = !isOpen;
-        if (isOpen)
-            inventoryManager.OpenInventories(inventory.Id);
-        else
-            inventoryManager.CloseInventories();
+        InventoryManager.Instance.OpenInventories(inventory.Id);
     }
 }

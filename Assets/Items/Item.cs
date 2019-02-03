@@ -3,6 +3,7 @@
 /* The base item class. All items should derive from this. */
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
+[System.Serializable]
 public class Item : ScriptableObject {
 
     public new string name = "New Item";    // Name of the item

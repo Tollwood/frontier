@@ -29,7 +29,11 @@ public class InputManager: MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(inventoryKeyCode))
+        {
             inventoryManager.ToggleInventory();
+
+        }
+
 
         if (Input.GetKeyDown(placePoleKey))
             propertyMarker.AddPole(GameObject.FindWithTag("Player").transform.position);
@@ -41,5 +45,6 @@ public class InputManager: MonoBehaviour
             planningManager.TogglePlanningMode();
         if (Input.GetKeyDown(switchPlayer))
             playerManager.SwitchPlayer();
+
     }
 }

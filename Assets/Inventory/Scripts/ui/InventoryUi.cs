@@ -9,6 +9,11 @@ public class InventoryUi : MonoBehaviour
     public InventorySlot itemSlotsPrefab;
     private Inventory inventory;
 
+    private void Start()
+    {
+        InventoryManager.Instance.OnCloseInventoryCallback += OnCloseInventory;
+    }
+
     public void OnOpenInventory(Inventory inventory)
     {
         inventoryUI.SetActive(true);

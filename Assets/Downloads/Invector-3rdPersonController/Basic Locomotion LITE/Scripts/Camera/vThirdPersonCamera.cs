@@ -158,7 +158,7 @@ public class vThirdPersonCamera : MonoBehaviour
         }
         else
         {
-            mouseY = currentTarget.root.localEulerAngles.x;
+            mouseY = currentTarget.root.localEulerAngles.x + 180 ;
             mouseX = currentTarget.root.localEulerAngles.y;
         }
     }

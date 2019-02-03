@@ -2,13 +2,10 @@
 using Invector.CharacterController;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : Singleton<PlayerManager>
 {
-
     public delegate void OnPlayerChanged(GameObject player);
     public OnPlayerChanged PlayerChanged;
-
-    InventoryManager inventoryManager;
 
     public vThirdPersonCamera cam;
     public GameObject playerWithCameraPrefab;
@@ -16,6 +13,7 @@ public class PlayerManager : MonoBehaviour
     public Vector3[] playerPositions;
     public string[] playerNames;
     private string[] inventoryIds;
+    private EquipmentPositions[] equipmentPositions;
 
     private GameObject[] players;
     private int currentPlayer;
@@ -23,15 +21,17 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        inventoryManager = GetComponent<InventoryManager>();
+        InventoryManager inventoryManager = InventoryManager.Instance;
         players = new GameObject[playerPositions.Length];
         inventoryIds = new string[playerPositions.Length];
+        equipmentPositions = new EquipmentPositions[playerPositions.Length];
         for (int i = 0; i< playerPositions.Length; i++)
         {
             GameObject go = Instantiate(playerWithCameraPrefab, playerPositions[i], Quaternion.identity, container);
             go.name = playerNames[i];
             players[i] = go;
-            inventoryIds[i] = inventoryManager.AddInventory(10).Id;
+            inventoryIds[i] = inventoryManager.AddInventory(10, playerNames[i]).Id;
+            equipmentPositions[i] = go.GetComponent<EquipmentPositions>();
         }
         currentPlayer = 0;
         cam.target = players[currentPlayer].transform;
@@ -39,9 +39,14 @@ public class PlayerManager : MonoBehaviour
         players[currentPlayer].AddComponent<vThirdPersonController>();
     }
 
+    internal EquipmentPositions GetEquipmentPositions()
+    {
+        return equipmentPositions[currentPlayer];
+    }
+
     internal Inventory GetCurrentInventory()
     {
-        return inventoryManager.GetInventory(inventoryIds[currentPlayer]);
+        return InventoryManager.Instance.GetInventory(inventoryIds[currentPlayer]);
     }
 
     public void SwitchPlayer()

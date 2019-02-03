@@ -2,37 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : Singleton<InventoryManager>
 {
+    public delegate void OnOpenInventory();
+    public OnOpenInventory OnOpenInventoryCallback;
+
+    public delegate void OnCloseInventory();
+    public OnCloseInventory OnCloseInventoryCallback;
+
     private InventoryUi primaryInventoryUi;
     private InventoryUi secondaryInventoryUi;
 
     bool isOpen = false;
-    PlayerManager playerManager;
 
     private Dictionary<string, Inventory> inventories = new Dictionary<string, Inventory>();
 
     private void Start()
     {
-        playerManager = FindObjectOfType<PlayerManager>();
         primaryInventoryUi = GameObject.FindWithTag("primaryInventoryUi").GetComponent<InventoryUi>();
         secondaryInventoryUi = GameObject.FindWithTag("secondaryInventoryUi").GetComponent<InventoryUi>();
     }
 
     internal void OpenInventories(string id)
     {
-        primaryInventoryUi.OnOpenInventory(playerManager.GetCurrentInventory());
+        isOpen = true;
+        primaryInventoryUi.OnOpenInventory(PlayerManager.Instance.GetCurrentInventory());
         secondaryInventoryUi.OnOpenInventory(GetInventory(id));
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        InvokeOnOpenInventoryCallback();
     }
 
     internal void CloseInventories()
     {
-        primaryInventoryUi.OnCloseInventory();
-        secondaryInventoryUi.OnCloseInventory();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        InvokeOnCloseInventoryCallback();
     }
 
     public void ToggleInventory()
@@ -40,24 +41,30 @@ public class InventoryManager : MonoBehaviour
         isOpen = !isOpen;
         if (isOpen)
         {
-            primaryInventoryUi.OnOpenInventory(playerManager.GetCurrentInventory());
-            //freeze Camera
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            primaryInventoryUi.OnOpenInventory(PlayerManager.Instance.GetCurrentInventory());
+            InvokeOnOpenInventoryCallback();
         }
         else
         {
-            primaryInventoryUi.OnCloseInventory();
-            //rotate Camera
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            InvokeOnCloseInventoryCallback();
         }
     }
 
-    internal Inventory AddInventory(int space)
+    internal Inventory AddInventory(int space, string inventoryName) {
+        return AddInventory(space, inventoryName, null);
+    }
+
+    internal Inventory AddInventory(int space, string inventoryName, Item[] items)
     {
         string id = Guid.NewGuid().ToString();
-        Inventory inventory = new Inventory(id, space);
+        Inventory inventory = new Inventory(id, space, inventoryName);
+        if(items != null && items.Length == space)
+        {
+            for (int i = 0; i < space; i++)
+            {
+                inventory.items[i] = items[i];
+            }
+        }
         inventories.Add(id, inventory);
         return inventory;
     }
@@ -81,5 +88,21 @@ public class InventoryManager : MonoBehaviour
     {
         inventories.TryGetValue(id, out Inventory inventory);
         return inventory;
+    }
+
+    private void InvokeOnOpenInventoryCallback()
+    {
+        if (OnOpenInventoryCallback != null)
+        {
+            OnOpenInventoryCallback.Invoke();
+        }
+    }
+
+    private void InvokeOnCloseInventoryCallback()
+    {
+        if (OnCloseInventoryCallback != null)
+        {
+            OnCloseInventoryCallback.Invoke();
+        }
     }
 }
