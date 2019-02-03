@@ -9,7 +9,7 @@ public class Item : ScriptableObject {
     public new string name = "New Item";    // Name of the item
     public Sprite icon = null;              // Item icon
     public int amount;
-
+    public Capability capabiltiy = Capability.None;
 
     public Item Clone()
     {

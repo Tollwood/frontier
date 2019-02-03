@@ -17,6 +17,7 @@ public class TerrainModification : MonoBehaviour
 
     public bool raiseLevel = true;
     public bool lowerLevel = true;
+    private bool canModifyTerrain = false;
 
     void Start()
     {
@@ -24,7 +25,11 @@ public class TerrainModification : MonoBehaviour
         terr = Terrain.activeTerrain;
         hmWidth = terr.terrainData.heightmapWidth;
         hmHeight = terr.terrainData.heightmapHeight;
-
+        EquipmentManager.Instance.onEquipedCallback -= ActivateDigging;
+        EquipmentManager.Instance.onEquipedCallback += ActivateDigging;
+       
+        EquipmentManager.Instance.onUnEquipCallback -= DeactivateDigging;
+        EquipmentManager.Instance.onUnEquipCallback += DeactivateDigging;
     }
 
     void Update()
@@ -40,7 +45,7 @@ public class TerrainModification : MonoBehaviour
         posYInTerrain = (int)(coord.z * hmHeight);
         currentHeight = terr.terrainData.GetHeights(posXInTerrain, posYInTerrain,1,1)[0,0];
 
-        if (Input.GetKey(KeyCode.X)) {
+        if (Input.GetKey(KeyCode.X) && canModifyTerrain) {
         
             // we set an offset so that all the raising terrain is under this game object
             int offset = size / 2;
@@ -69,6 +74,21 @@ public class TerrainModification : MonoBehaviour
             }
             terr.terrainData.SetHeights(posXInTerrain - offset, posYInTerrain - offset, heights);
         }
+    }
 
+    public void ActivateDigging(Equipment equipment)
+    {
+        if(equipment.capabiltiy == Capability.Digging)
+        {
+            canModifyTerrain = true;
+        }
+    }
+
+    public void DeactivateDigging(Equipment equipment)
+    {
+        if (equipment.capabiltiy == Capability.Digging)
+        {
+            canModifyTerrain = false;
+        }
     }
 }

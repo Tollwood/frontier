@@ -1,7 +1,13 @@
 ﻿using UnityEngine;
 
-public class EquipmentManager : MonoBehaviour
+public class EquipmentManager : Singleton<EquipmentManager>
 {
+    public delegate void OnEquiped(Equipment item);
+    public OnEquiped onEquipedCallback;
+
+    public delegate void OnUnEquip(Equipment item);
+    public OnEquiped onUnEquipCallback;
+
     public EquipmentSlot rightHand = new EquipmentSlot();
 
     public bool Equip(Equipment equipment)
@@ -10,6 +16,11 @@ public class EquipmentManager : MonoBehaviour
         {
             UnEquip(rightHand);
             equipUi(rightHand, equipment);
+            if(onEquipedCallback != null)
+            {
+                onEquipedCallback.Invoke(equipment);
+            }
+
             return true;
         }
         return false;
@@ -20,6 +31,10 @@ public class EquipmentManager : MonoBehaviour
         foreach(Transform child in PlayerManager.Instance.GetEquipmentPositions().rightHand)
         {
             Destroy(child.gameObject);
+        }
+        if(rightHand.equipment != null && onUnEquipCallback != null)
+        {
+            onUnEquipCallback.Invoke(rightHand.equipment);
         }
         rightHand.equipment = null;
         return true;

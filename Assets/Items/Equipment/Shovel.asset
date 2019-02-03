@@ -15,6 +15,8 @@ MonoBehaviour:
   name: Shovel
   icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   amount: 1
+  capabiltiy: 1
+  type: 0
   Prefab: {fileID: 1000010209671850, guid: 6b30f59df335b6543afa70edc9687614, type: 3}
   Position: {x: 0, y: 0, z: -0.708}
   Rotation: {x: 0, y: 0, z: 0}

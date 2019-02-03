@@ -1,0 +1,1 @@
+﻿public enum Capability{ None, Digging }
