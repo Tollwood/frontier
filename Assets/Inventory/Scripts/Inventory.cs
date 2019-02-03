@@ -7,11 +7,12 @@ public class Inventory
     public int space;  // Amount of item spaces
     public Item[] items;
 
-    public Inventory(string id, int space)
+    public Inventory(string id, int space, string name)
     {
         this.Id = id;
         this.space = space;
-        items = new Item[space];
+        this.name = name;
+        this.items = new Item[space];
     }
 
     public bool Add(Item item)

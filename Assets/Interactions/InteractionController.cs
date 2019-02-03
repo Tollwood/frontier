@@ -8,8 +8,12 @@ public class InteractionController : MonoBehaviour
     private TextMeshProUGUI hint;
     private Interactable interactable;
 
+    private bool interacting = true;
+
     private void Start()
     {
+        InventoryManager.Instance.OnOpenInventoryCallback += OnOpenInventory;
+        InventoryManager.Instance.OnCloseInventoryCallback += OnCloseInventory;
         hint = GameObject.FindGameObjectWithTag("hint").GetComponent<TextMeshProUGUI>();
     }
 
@@ -29,6 +33,10 @@ public class InteractionController : MonoBehaviour
 
     private Interactable RayCastInteractable()
     {
+        if (!interacting)
+        {
+            return null;
+        }
         RaycastHit hit;
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, distance))
@@ -43,5 +51,15 @@ public class InteractionController : MonoBehaviour
         {
             interactable.Interact();
         }
+    }
+
+    public void OnOpenInventory()
+    {
+        interacting = false;
+    }
+
+    public void OnCloseInventory()
+    {
+        interacting = true;
     }
 }
