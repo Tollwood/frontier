@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class TerrainModification : MonoBehaviour
+public class TerrainModificationManager : Singleton<TerrainModificationManager>
 {
     Terrain terr; // terrain to modify
     int hmWidth; // heightmap width
@@ -10,14 +11,14 @@ public class TerrainModification : MonoBehaviour
     int posYInTerrain; // position of the game object in terrain height (z axis)
 
     public int size = 5; // the diameter of terrain portion that will raise under the game object
-    public float desiredHeight = 0; // the height we want that portion of terrain to be
-
+    public float desiredHeight = 0;
     public float currentHeight = 0f;
     public float increment = 0.02f;
 
     public bool raiseLevel = true;
     public bool lowerLevel = true;
     private bool canModifyTerrain = false;
+    private GameObject currentPlayer;
 
     void Start()
     {
@@ -25,6 +26,8 @@ public class TerrainModification : MonoBehaviour
         terr = Terrain.activeTerrain;
         hmWidth = terr.terrainData.heightmapWidth;
         hmHeight = terr.terrainData.heightmapHeight;
+        PlayerManager.Instance.PlayerChanged -= OnPlayerChanged;
+        PlayerManager.Instance.PlayerChanged += OnPlayerChanged;
         EquipmentManager.Instance.onEquipedCallback -= ActivateDigging;
         EquipmentManager.Instance.onEquipedCallback += ActivateDigging;
        
@@ -34,7 +37,18 @@ public class TerrainModification : MonoBehaviour
 
     void Update()
     {
-        Vector3 tempCoord = (transform.position - terr.gameObject.transform.position);
+        if (!canModifyTerrain)
+            return;
+        UpdateCurrentHeight();
+    }
+
+    private void UpdateCurrentHeight()
+    {
+        if (currentPlayer == null)
+        {
+            currentPlayer = PlayerManager.Instance.CurrentPlayer();
+        }
+        Vector3 tempCoord = (currentPlayer.transform.position - terr.gameObject.transform.position);
         Vector3 coord;
         coord.x = tempCoord.x / terr.terrainData.size.x;
         coord.y = tempCoord.y / terr.terrainData.size.y;
@@ -43,10 +57,14 @@ public class TerrainModification : MonoBehaviour
         // get the position of the terrain heightmap where this game object is
         posXInTerrain = (int)(coord.x * hmWidth);
         posYInTerrain = (int)(coord.z * hmHeight);
-        currentHeight = terr.terrainData.GetHeights(posXInTerrain, posYInTerrain,1,1)[0,0];
+        currentHeight = CurrentHeight();
+    }
 
-        if (Input.GetKey(KeyCode.X) && canModifyTerrain) {
-        
+    private void dig()
+    {
+        if (canModifyTerrain)
+        {
+
             // we set an offset so that all the raising terrain is under this game object
             int offset = size / 2;
 
@@ -63,9 +81,9 @@ public class TerrainModification : MonoBehaviour
                     float terrainHeight = heights[i, j];
                     if (raiseLevel && height < desiredHeight)
                     {
-                        heights[i, j] =  Mathf.Clamp(terrainHeight + increment, terrainHeight, desiredHeight);
+                        heights[i, j] = Mathf.Clamp(terrainHeight + increment, terrainHeight, desiredHeight);
                     }
-                    else if(lowerLevel && height > desiredHeight)
+                    else if (lowerLevel && height > desiredHeight)
                     {
                         heights[i, j] = Mathf.Clamp(terrainHeight - increment, desiredHeight, terrainHeight);
 
@@ -76,11 +94,36 @@ public class TerrainModification : MonoBehaviour
         }
     }
 
+    private float CurrentHeight()
+    {
+        return terr.terrainData.GetHeights(posXInTerrain, posYInTerrain, 1, 1)[0, 0];
+    }
+
+    public float CurrentHeightInMeter()
+    {
+        return toMeter(CurrentHeight());
+    }
+
+    internal float DesiredHeightInMeter()
+    {
+        return toMeter(desiredHeight);
+    }
+
+    private float toMeter(float height)
+    {
+        return (float)Math.Round(Convert.ToDouble(height * 1000), 2);
+    }
+
     public void ActivateDigging(Equipment equipment)
     {
         if(equipment.capabiltiy == Capability.Digging)
         {
             canModifyTerrain = true;
+            InputManager.Instance.executePrimaryAction = dig;
+            InputManager.Instance.OnIncrease += increaseDesiredHeight;
+            InputManager.Instance.OnDecrease += decreaseDesiredHeight;
+            UpdateCurrentHeight();
+            desiredHeight = CurrentHeight();
         }
     }
 
@@ -89,6 +132,27 @@ public class TerrainModification : MonoBehaviour
         if (equipment.capabiltiy == Capability.Digging)
         {
             canModifyTerrain = false;
+            InputManager.Instance.executePrimaryAction -= dig;
+            InputManager.Instance.OnIncrease -= increaseDesiredHeight;
+            InputManager.Instance.OnDecrease -= decreaseDesiredHeight;
         }
+ 
+    }
+
+    public void OnPlayerChanged(GameObject player)
+    {
+        this.currentPlayer = player;
+        // update canModifyTerrain according to currentPlayer
+    }
+
+
+    public void increaseDesiredHeight()
+    {
+        desiredHeight += increment;
+    }
+
+    public void decreaseDesiredHeight()
+    {
+        desiredHeight -= increment;
     }
 }

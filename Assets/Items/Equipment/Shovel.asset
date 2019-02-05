@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shovel
   m_EditorClassIdentifier: 
   name: Shovel
-  icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: 3b6cef9d7d7ea4ae59450979b32fd04a, type: 3}
   amount: 1
   capabiltiy: 1
   type: 0

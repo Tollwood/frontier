@@ -13,7 +13,7 @@ public class InventoryManager : Singleton<InventoryManager>
     private InventoryUi primaryInventoryUi;
     private InventoryUi secondaryInventoryUi;
 
-    bool isOpen = false;
+    public bool isOpen { get; private set; } = false;
 
     private Dictionary<string, Inventory> inventories = new Dictionary<string, Inventory>();
 

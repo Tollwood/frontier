@@ -5,21 +5,59 @@ using System.Linq;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class PropertyMarker : MonoBehaviour
 {
-    public GameObject polePrefab; 
+
+    public GameObject polePrefab;
     public GameObject messageBoardPrefab;
 
     public int maxPoles = 4;
 
-    private  List<GameObject> poles = new List<GameObject>();
+    private List<GameObject> poles = new List<GameObject>();
     private MeshFilter meshFilter;
+    private float increment = .2f;
+
+    public float heightOffset { get; private set; } = 0.5f;
+
     private void Awake()
     {
         meshFilter = GetComponent<MeshFilter>();
     }
 
-    public void AddPole(Vector3 newPosition)
+    private void Start()
     {
-        if(poles.Count == maxPoles)
+        EquipmentManager.Instance.onEquipedCallback -= ActivatePropertyMarking;
+        EquipmentManager.Instance.onEquipedCallback += ActivatePropertyMarking;
+
+        EquipmentManager.Instance.onUnEquipCallback -= DeactivatePropertyMarking;
+        EquipmentManager.Instance.onUnEquipCallback += DeactivatePropertyMarking;
+
+    }
+
+    private void ActivatePropertyMarking(Equipment item)
+    {
+        if (item.capabiltiy == Capability.PropertyMarking)
+        {
+            InputManager.Instance.executePrimaryAction += AddPole;
+            InputManager.Instance.OnIncrease += OnIncreaseHeight;
+            InputManager.Instance.OnDecrease += OnDecreaseHeight;
+        }
+    }
+    private void DeactivatePropertyMarking(Equipment item)
+    {
+        if (item.capabiltiy == Capability.PropertyMarking)
+        {
+            InputManager.Instance.executePrimaryAction -= AddPole;
+            InputManager.Instance.OnIncrease -= OnIncreaseHeight;
+            InputManager.Instance.OnDecrease -= OnDecreaseHeight;
+        }
+    }
+
+
+    public void AddPole()
+    {
+        Transform playerTransform = PlayerManager.Instance.CurrentPlayer().transform;
+        Vector3 newPosition = playerTransform.position + (playerTransform.forward * 0.5f);
+
+        if (poles.Count == maxPoles)
         {
             poles.ForEach((GameObject obj) => Destroy(obj));
             poles.Clear();
@@ -32,7 +70,23 @@ public class PropertyMarker : MonoBehaviour
         {
             BuildMesh();
         }
+
     }
+
+
+
+    public void OnIncreaseHeight()
+    {
+        heightOffset += increment;
+        BuildMesh();
+    }
+
+    public void OnDecreaseHeight()
+    {
+        heightOffset -= increment;
+        BuildMesh();
+    }
+
 
     private void BuildMesh()
     {
@@ -73,7 +127,7 @@ public class PropertyMarker : MonoBehaviour
         List<Vector3> polesPositions = poles.Select((arg) => { return arg.transform.position; }).ToList();
         List<Vector3> convexHull = JarvisMarchAlgorithm.GetConvexHull(polesPositions);
         return convexHull.Select((Vector3 convexHullElement) => {
-            convexHullElement.y += 0.5f;
+            convexHullElement.y += heightOffset;
             return convexHullElement; 
             }).ToList();
     }

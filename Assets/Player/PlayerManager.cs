@@ -16,7 +16,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private EquipmentPositions[] equipmentPositions;
 
     private GameObject[] players;
-    private int currentPlayer;
+    private int currentIndex;
 
     // Start is called before the first frame update
     void Start()
@@ -33,34 +33,43 @@ public class PlayerManager : Singleton<PlayerManager>
             inventoryIds[i] = inventoryManager.AddInventory(10, playerNames[i]).Id;
             equipmentPositions[i] = go.GetComponent<EquipmentPositions>();
         }
-        currentPlayer = 0;
-        cam.target = players[currentPlayer].transform;
-        players[currentPlayer].AddComponent<vThirdPersonInput>();
-        players[currentPlayer].AddComponent<vThirdPersonController>();
+        SwitchPlayer(0);
     }
 
     internal EquipmentPositions GetEquipmentPositions()
     {
-        return equipmentPositions[currentPlayer];
+        return equipmentPositions[currentIndex];
     }
 
     internal Inventory GetCurrentInventory()
     {
-        return InventoryManager.Instance.GetInventory(inventoryIds[currentPlayer]);
+        return InventoryManager.Instance.GetInventory(inventoryIds[currentIndex]);
+    }
+
+    internal GameObject CurrentPlayer()
+    {
+        return players[currentIndex];
     }
 
     public void SwitchPlayer()
     {
-        Destroy(players[currentPlayer].GetComponent<vThirdPersonInput>());
-        Destroy(players[currentPlayer].GetComponent<vThirdPersonController>());
-        if (currentPlayer == players.Length - 1)
-            currentPlayer = 0;
+        int newPlayerIndex;
+        if (currentIndex == players.Length - 1)
+            newPlayerIndex = 0;
         else
-            currentPlayer++;
-        cam.target = players[currentPlayer].transform;
-        PlayerChanged?.Invoke(players[currentPlayer]);
-        players[currentPlayer].AddComponent<vThirdPersonInput>();
-        players[currentPlayer].AddComponent<vThirdPersonController>();
+            newPlayerIndex = currentIndex + 1;
+
+        SwitchPlayer(newPlayerIndex);
+    }
+
+    public void SwitchPlayer(int index)
+    {
+        //Destroy(players[currentPlayer].GetComponent<vThirdPersonInput>());
+        //Destroy(players[currentPlayer].GetComponent<vThirdPersonController>());
+        cam.target = players[index].transform;
+        PlayerChanged?.Invoke(players[currentIndex]);
+        players[currentIndex].AddComponent<vThirdPersonInput>();
+        players[currentIndex].AddComponent<vThirdPersonController>();
     }
 
 }
