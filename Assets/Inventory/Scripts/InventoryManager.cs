@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class InventoryManager : Singleton<InventoryManager>
 {
-    public delegate void OnOpenInventory();
-    public OnOpenInventory OnOpenInventoryCallback;
-
-    public delegate void OnCloseInventory();
-    public OnCloseInventory OnCloseInventoryCallback;
-
     private InventoryUi primaryInventoryUi;
     private InventoryUi secondaryInventoryUi;
 
@@ -28,12 +22,12 @@ public class InventoryManager : Singleton<InventoryManager>
         isOpen = true;
         primaryInventoryUi.OnOpenInventory(PlayerManager.Instance.GetCurrentInventory());
         secondaryInventoryUi.OnOpenInventory(GetInventory(id));
-        InvokeOnOpenInventoryCallback();
+        EventManager.TriggerEvent(Events.OnOpenInventory);
     }
 
     internal void CloseInventories()
     {
-        InvokeOnCloseInventoryCallback();
+        EventManager.TriggerEvent(Events.OnCloseInventory);
     }
 
     public void ToggleInventory()
@@ -42,11 +36,11 @@ public class InventoryManager : Singleton<InventoryManager>
         if (isOpen)
         {
             primaryInventoryUi.OnOpenInventory(PlayerManager.Instance.GetCurrentInventory());
-            InvokeOnOpenInventoryCallback();
+            EventManager.TriggerEvent(Events.OnOpenInventory);
         }
         else
         {
-            InvokeOnCloseInventoryCallback();
+            EventManager.TriggerEvent(Events.OnCloseInventory);
         }
     }
 
@@ -90,19 +84,4 @@ public class InventoryManager : Singleton<InventoryManager>
         return inventory;
     }
 
-    private void InvokeOnOpenInventoryCallback()
-    {
-        if (OnOpenInventoryCallback != null)
-        {
-            OnOpenInventoryCallback.Invoke();
-        }
-    }
-
-    private void InvokeOnCloseInventoryCallback()
-    {
-        if (OnCloseInventoryCallback != null)
-        {
-            OnCloseInventoryCallback.Invoke();
-        }
-    }
 }

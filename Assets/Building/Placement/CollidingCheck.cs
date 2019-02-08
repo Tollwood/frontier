@@ -13,9 +13,7 @@ public class CollidingCheck : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
         rigidbody.isKinematic = true;
         rigidbody.useGravity = false;
-
         meshRenderer = GetComponent<MeshRenderer>();
-
     }
 
     private void OnTriggerEnter(Collider other)

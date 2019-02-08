@@ -2,12 +2,6 @@
 
 public class EquipmentManager : Singleton<EquipmentManager>
 {
-    public delegate void OnEquiped(Equipment item);
-    public OnEquiped onEquipedCallback;
-
-    public delegate void OnUnEquip(Equipment item);
-    public OnEquiped onUnEquipCallback;
-
     public EquipmentSlot rightHand = new EquipmentSlot();
 
     public bool Equip(Equipment equipment)
@@ -16,11 +10,7 @@ public class EquipmentManager : Singleton<EquipmentManager>
         {
             UnEquip(rightHand);
             equipUi(rightHand, equipment);
-            if(onEquipedCallback != null)
-            {
-                onEquipedCallback.Invoke(equipment);
-            }
-
+            EventManager.TriggerEvent(Events.OnItemEquip,equipment);
             return true;
         }
         return false;
@@ -32,9 +22,9 @@ public class EquipmentManager : Singleton<EquipmentManager>
         {
             Destroy(child.gameObject);
         }
-        if(rightHand.equipment != null && onUnEquipCallback != null)
+        if(rightHand.equipment != null)
         {
-            onUnEquipCallback.Invoke(rightHand.equipment);
+            EventManager.TriggerEvent(Events.OnItemUnEquip, rightHand.equipment);
         }
         rightHand.equipment = null;
         return true;

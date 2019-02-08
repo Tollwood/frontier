@@ -13,10 +13,9 @@ public class TerrainModificationUi : MonoBehaviour
 
     private void Start()
     {
-        EquipmentManager.Instance.onEquipedCallback -= OnEquip;
-        EquipmentManager.Instance.onEquipedCallback += OnEquip;
-        EquipmentManager.Instance.onUnEquipCallback -= OnUnEquip;
-        EquipmentManager.Instance.onUnEquipCallback += OnUnEquip;
+        EventManager.StartListening(Events.OnItemEquip, OnEquip);
+        EventManager.StartListening(Events.OnItemUnEquip, OnUnEquip);
+
     }
 
     private void Update()
@@ -27,8 +26,10 @@ public class TerrainModificationUi : MonoBehaviour
         desiredHeight.text = TerrainModificationManager.Instance.DesiredHeightInMeter() + "m";
     }
 
-    public void OnEquip(Equipment equipment)
+    public void OnEquip(System.Object obj)
     {
+        Equipment equipment = (Equipment)obj;
+
         if(equipment.capabiltiy == Capability.Digging)
         {
             isActive = true;
@@ -37,8 +38,9 @@ public class TerrainModificationUi : MonoBehaviour
         }
     }
 
-    public void OnUnEquip(Equipment equipment)
+    public void OnUnEquip(System.Object obj)
     {
+        Equipment equipment = (Equipment)obj;
         if (equipment.capabiltiy == Capability.Digging)
         {
             isActive = false;

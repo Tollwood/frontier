@@ -5,35 +5,21 @@ public class PlanningManager : MonoBehaviour
     public GameObject playerMode;
     public GameObject playerModeUi;
 
-    private bool planningActive;
-
-    private void Awake()
+    private void Start()
     {
-        planningActive = false;
+        EventManager.StartListening(Events.StartPlanningMode, () => TogglePlanning(true));
+        EventManager.StartListening(Events.StopPlanningMode, () => TogglePlanning(false));
     }
 
-    public void TogglePlanningMode()
+    private void TogglePlanning(bool enable)
     {
-        planningActive = !planningActive;
         foreach (Transform child in transform)
         {
-            child.gameObject.SetActive(planningActive);
+            child.gameObject.SetActive(enable);
 
         }
-        playerMode.SetActive(!planningActive);
-        playerModeUi.SetActive(!planningActive);
-
-
-        if (planningActive)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        playerMode.SetActive(!enable);
+        playerModeUi.SetActive(!enable);
     }
 
 }

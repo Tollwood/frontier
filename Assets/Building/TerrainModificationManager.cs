@@ -7,8 +7,7 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
     int hmWidth; // heightmap width
     int hmHeight; // heightmap height
 
-    int posXInTerrain; // position of the game object in terrain width (x axis)
-    int posYInTerrain; // position of the game object in terrain height (z axis)
+    Vector2 coordInTerrrain;
 
     public int size = 5; // the diameter of terrain portion that will raise under the game object
     public float desiredHeight = 0;
@@ -26,13 +25,10 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
         terr = Terrain.activeTerrain;
         hmWidth = terr.terrainData.heightmapWidth;
         hmHeight = terr.terrainData.heightmapHeight;
-        PlayerManager.Instance.PlayerChanged -= OnPlayerChanged;
-        PlayerManager.Instance.PlayerChanged += OnPlayerChanged;
-        EquipmentManager.Instance.onEquipedCallback -= ActivateDigging;
-        EquipmentManager.Instance.onEquipedCallback += ActivateDigging;
-       
-        EquipmentManager.Instance.onUnEquipCallback -= DeactivateDigging;
-        EquipmentManager.Instance.onUnEquipCallback += DeactivateDigging;
+        EventManager.StartListening(Events.OnPlayerChanged, OnPlayerChanged);
+
+       EventManager.StartListening(Events.OnItemEquip, ActivateDigging);
+       EventManager.StartListening(Events.OnItemUnEquip, DeactivateDigging);
     }
 
     void Update()
@@ -48,17 +44,30 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
         {
             currentPlayer = PlayerManager.Instance.CurrentPlayer();
         }
-        Vector3 tempCoord = (currentPlayer.transform.position - terr.gameObject.transform.position);
+
+        coordInTerrrain = GetCoordInTerrain(currentPlayer.transform.position);
+        currentHeight = CurrentHeight();
+    }
+
+    private Vector2 GetCoordInTerrain(Vector3 position)
+    {
+        Vector3 tempCoord = (position - terr.gameObject.transform.position);
         Vector3 coord;
         coord.x = tempCoord.x / terr.terrainData.size.x;
         coord.y = tempCoord.y / terr.terrainData.size.y;
         coord.z = tempCoord.z / terr.terrainData.size.z;
 
         // get the position of the terrain heightmap where this game object is
-        posXInTerrain = (int)(coord.x * hmWidth);
-        posYInTerrain = (int)(coord.z * hmHeight);
-        currentHeight = CurrentHeight();
+        return new Vector2((int)(coord.x * hmWidth), (int)(coord.z * hmHeight));
     }
+
+    public float GetHeight(Vector3 position)
+    {
+        //Vector2 coord = GetCoordInTerrain(position);
+        //return terr.terrainData.GetHeights((int)coord.x, (int)coord.y, 1, 1)[0, 0];
+        return terr.SampleHeight(position);
+    }
+
 
     private void dig()
     {
@@ -69,7 +78,7 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
             int offset = size / 2;
 
             // get the heights of the terrain under this game object
-            float[,] heights = terr.terrainData.GetHeights(posXInTerrain - offset, posYInTerrain - offset, size, size);
+            float[,] heights = terr.terrainData.GetHeights((int)coordInTerrrain.x - offset, (int)coordInTerrrain.y - offset, size, size);
 
             // we set each sample of the terrain in the size to the desired height
 
@@ -90,13 +99,13 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
                     }
                 }
             }
-            terr.terrainData.SetHeights(posXInTerrain - offset, posYInTerrain - offset, heights);
+            terr.terrainData.SetHeights((int)coordInTerrrain.x - offset, (int)coordInTerrrain.y - offset, heights);
         }
     }
 
     private float CurrentHeight()
     {
-        return terr.terrainData.GetHeights(posXInTerrain, posYInTerrain, 1, 1)[0, 0];
+        return terr.terrainData.GetHeights((int)coordInTerrrain.x, (int)coordInTerrrain.y, 1, 1)[0, 0];
     }
 
     public float CurrentHeightInMeter()
@@ -114,34 +123,36 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
         return (float)Math.Round(Convert.ToDouble(height * 1000), 2);
     }
 
-    public void ActivateDigging(Equipment equipment)
+    public void ActivateDigging(System.Object obj)
     {
-        if(equipment.capabiltiy == Capability.Digging)
+        Equipment equipment = (Equipment)obj;
+        if (equipment.capabiltiy == Capability.Digging)
         {
             canModifyTerrain = true;
-            InputManager.Instance.executePrimaryAction = dig;
-            InputManager.Instance.OnIncrease += increaseDesiredHeight;
-            InputManager.Instance.OnDecrease += decreaseDesiredHeight;
+            EventManager.StartListening(Events.OnExecutePrimaryAction, dig);
+            EventManager.StartListening(Events.OnIncrease, increaseDesiredHeight);
+            EventManager.StartListening(Events.OnDecrease, decreaseDesiredHeight);
             UpdateCurrentHeight();
             desiredHeight = CurrentHeight();
         }
     }
 
-    public void DeactivateDigging(Equipment equipment)
+    public void DeactivateDigging(System.Object obj)
     {
+        Equipment equipment = (Equipment)obj;
         if (equipment.capabiltiy == Capability.Digging)
         {
             canModifyTerrain = false;
-            InputManager.Instance.executePrimaryAction -= dig;
-            InputManager.Instance.OnIncrease -= increaseDesiredHeight;
-            InputManager.Instance.OnDecrease -= decreaseDesiredHeight;
+            EventManager.StopListening(Events.OnExecutePrimaryAction, dig); 
+            EventManager.StopListening(Events.OnIncrease, increaseDesiredHeight);
+            EventManager.StopListening(Events.OnDecrease, decreaseDesiredHeight);
         }
  
     }
 
-    public void OnPlayerChanged(GameObject player)
+    public void OnPlayerChanged(System.Object player)
     {
-        this.currentPlayer = player;
+        this.currentPlayer = (GameObject)player;
         // update canModifyTerrain according to currentPlayer
     }
 
@@ -153,6 +164,6 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
 
     public void decreaseDesiredHeight()
     {
-        desiredHeight -= increment;
+        desiredHeight = Mathf.Clamp(increment,0,desiredHeight);
     }
 }

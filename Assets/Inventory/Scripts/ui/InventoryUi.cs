@@ -11,7 +11,7 @@ public class InventoryUi : MonoBehaviour
 
     private void Start()
     {
-        InventoryManager.Instance.OnCloseInventoryCallback += OnCloseInventory;
+        EventManager.StartListening(Events.OnCloseInventory, OnCloseInventory);
     }
 
     public void OnOpenInventory(Inventory inventory)

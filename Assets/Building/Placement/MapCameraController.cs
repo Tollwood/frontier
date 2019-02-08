@@ -19,7 +19,6 @@ public class MapCameraController : MonoBehaviour
     public void Update()
     {
         HandleZoom();
-
     }
 
     private void HandleZoom()

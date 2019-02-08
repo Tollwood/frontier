@@ -9,18 +9,20 @@ public class MouseManager: MonoBehaviour
 
     private void Start()
     {
-        InventoryManager.Instance.OnOpenInventoryCallback += OnOpenInventory;
-        InventoryManager.Instance.OnCloseInventoryCallback += OnCloseInventory;
+        EventManager.StartListening(Events.OnOpenInventory, OnShowMouse);
+        EventManager.StartListening(Events.OnCloseInventory, OnHideMouse);
+        EventManager.StartListening(Events.StartPlanningMode, OnShowMouse);
+        EventManager.StartListening(Events.StopPlanningMode, OnHideMouse);
     }
 
-    void OnOpenInventory() {
+    void OnShowMouse() {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         crosshair.gameObject.SetActive(false);
         camera.lockCamera = true;
     }
 
-    void OnCloseInventory()
+    void OnHideMouse()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false; 

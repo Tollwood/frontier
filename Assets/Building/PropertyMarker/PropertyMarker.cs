@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class PropertyMarker : MonoBehaviour
@@ -15,7 +16,11 @@ public class PropertyMarker : MonoBehaviour
     private MeshFilter meshFilter;
     private float increment = .2f;
 
-    public float heightOffset { get; private set; } = 0.5f;
+    public float heightOffset { get; private set; } = 0f;
+    private float meshHeight = 0f;
+    private float minhHeight = 0f;
+    private float maxHeight = 100f;
+    public float poleHeight = 1.4f;
 
     private void Awake()
     {
@@ -24,30 +29,29 @@ public class PropertyMarker : MonoBehaviour
 
     private void Start()
     {
-        EquipmentManager.Instance.onEquipedCallback -= ActivatePropertyMarking;
-        EquipmentManager.Instance.onEquipedCallback += ActivatePropertyMarking;
-
-        EquipmentManager.Instance.onUnEquipCallback -= DeactivatePropertyMarking;
-        EquipmentManager.Instance.onUnEquipCallback += DeactivatePropertyMarking;
+        EventManager.StartListening(Events.OnItemEquip, ActivatePropertyMarking);
+        EventManager.StartListening(Events.OnItemUnEquip, DeactivatePropertyMarking);
 
     }
 
-    private void ActivatePropertyMarking(Equipment item)
+    private void ActivatePropertyMarking(System.Object obj)
     {
-        if (item.capabiltiy == Capability.PropertyMarking)
+        Equipment equipment = (Equipment)obj;
+        if (equipment.capabiltiy == Capability.PropertyMarking)
         {
-            InputManager.Instance.executePrimaryAction += AddPole;
-            InputManager.Instance.OnIncrease += OnIncreaseHeight;
-            InputManager.Instance.OnDecrease += OnDecreaseHeight;
+            EventManager.StartListening(Events.OnExecutePrimaryAction,AddPole);
+            EventManager.StartListening(Events.OnIncrease, OnIncreaseHeight);
+            EventManager.StartListening(Events.OnDecrease, OnDecreaseHeight);
         }
     }
-    private void DeactivatePropertyMarking(Equipment item)
+    private void DeactivatePropertyMarking(System.Object obj)
     {
-        if (item.capabiltiy == Capability.PropertyMarking)
+        Equipment equipment = (Equipment)obj;
+        if (equipment.capabiltiy == Capability.PropertyMarking)
         {
-            InputManager.Instance.executePrimaryAction -= AddPole;
-            InputManager.Instance.OnIncrease -= OnIncreaseHeight;
-            InputManager.Instance.OnDecrease -= OnDecreaseHeight;
+            EventManager.StopListening(Events.OnExecutePrimaryAction,AddPole);
+            EventManager.StopListening(Events.OnIncrease, OnIncreaseHeight);
+            EventManager.StopListening(Events.OnDecrease, OnDecreaseHeight);
         }
     }
 
@@ -68,22 +72,24 @@ public class PropertyMarker : MonoBehaviour
         poles.Add(pole);
         if(poles.Count == maxPoles)
         {
+            List<Vector3> polesPositions = poles.Select((arg) => { return arg.transform.position; }).ToList();
+            SetHighestPoleAsMinHeight(polesPositions);
+            SetLowestPoleAsMaxHeight(polesPositions);
+            meshHeight = ((minhHeight + maxHeight) / 2) + heightOffset;
             BuildMesh();
         }
 
     }
 
-
-
     public void OnIncreaseHeight()
     {
-        heightOffset += increment;
+        meshHeight = Mathf.Clamp(meshHeight + increment, minhHeight, maxHeight);
         BuildMesh();
     }
 
     public void OnDecreaseHeight()
     {
-        heightOffset -= increment;
+        meshHeight = Mathf.Clamp(meshHeight - increment, minhHeight, maxHeight);
         BuildMesh();
     }
 
@@ -126,10 +132,37 @@ public class PropertyMarker : MonoBehaviour
     {
         List<Vector3> polesPositions = poles.Select((arg) => { return arg.transform.position; }).ToList();
         List<Vector3> convexHull = JarvisMarchAlgorithm.GetConvexHull(polesPositions);
+
+        meshHeight = Mathf.Clamp(meshHeight, minhHeight, maxHeight);
         return convexHull.Select((Vector3 convexHullElement) => {
-            convexHullElement.y += heightOffset;
+            convexHullElement.y = meshHeight;
             return convexHullElement; 
             }).ToList();
+    }
+
+    private void SetLowestPoleAsMaxHeight(List<Vector3> convexHull)
+    {
+        maxHeight = float.MaxValue;
+        foreach (Vector3 v in convexHull)
+        {
+            if (v.y < minhHeight)
+            {
+                maxHeight = v.y;
+            }
+        }
+        maxHeight += poleHeight;
+    }
+
+    private void SetHighestPoleAsMinHeight(List<Vector3> convexHull)
+    {
+        minhHeight = 0f;
+        foreach (Vector3 v in convexHull)
+        {
+            if (v.y > minhHeight)
+            {
+                minhHeight = v.y;
+            }
+        }
     }
 }
 

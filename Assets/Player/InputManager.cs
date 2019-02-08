@@ -3,14 +3,6 @@ using UnityEngine;
 
 public class InputManager: Singleton<InputManager>
 {
-    public delegate void onExecutePrimaryAction();
-    public onExecutePrimaryAction executePrimaryAction;
-    public delegate void DoIncrease();
-    public DoIncrease OnIncrease;
-    public delegate void DoDecrease();
-    public DoDecrease OnDecrease;
-
-
     public KeyCode inventoryKeyCode = KeyCode.I;
     public KeyCode interactionKeyCode = KeyCode.E;
     public KeyCode planningModeKey = KeyCode.M;
@@ -22,21 +14,28 @@ public class InputManager: Singleton<InputManager>
     private InteractionController interactionController;
     private PropertyMarker propertyMarker;
 
+    bool primaryActionEnabled = true;
+
     private void Start()
     {
         planningManager = FindObjectOfType<PlanningManager>();
         interactionController = FindObjectOfType<InteractionController>();
         propertyMarker = FindObjectOfType<PropertyMarker>();
+        EventManager.StartListening(Events.OnOpenInventory, () => primaryActionEnabled = false);
+        EventManager.StartListening(Events.StartPlanningMode, () => primaryActionEnabled = false);
+        EventManager.StartListening(Events.OnCloseInventory, () => primaryActionEnabled = true);
+        EventManager.StartListening(Events.StopPlanningMode, () => primaryActionEnabled = true);
+    }
 
+    private void DisablePrimaryAction()
+    {
+        throw new NotImplementedException();
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if(executePrimaryAction != null && !InventoryManager.Instance.isOpen)
-                executePrimaryAction.Invoke();
-        }
+        if (Input.GetMouseButtonDown(0) && primaryActionEnabled)
+            EventManager.TriggerEvent(Events.OnExecutePrimaryAction); ;
 
         if (Input.GetKeyDown(inventoryKeyCode))
             InventoryManager.Instance.ToggleInventory();
@@ -45,13 +44,13 @@ public class InputManager: Singleton<InputManager>
             interactionController.TriggerInteraction();
 
         if (Input.GetKeyDown(planningModeKey))
-            planningManager.TogglePlanningMode();
+            EventManager.TriggerEvent(Events.StopPlanningMode);
         if (Input.GetKeyDown(switchPlayer))
             PlayerManager.Instance.SwitchPlayer();
-        if (Input.GetKeyDown(increaseHeightKey) && OnIncrease != null)
-            OnIncrease.Invoke();
-        if (Input.GetKeyDown(decreaseHeightKey) && OnDecrease != null)
-            OnDecrease.Invoke();
+        if (Input.GetKeyDown(increaseHeightKey))
+            EventManager.TriggerEvent(Events.OnIncrease); 
+        if (Input.GetKeyDown(decreaseHeightKey))
+            EventManager.TriggerEvent(Events.OnDecrease);
 
 
 

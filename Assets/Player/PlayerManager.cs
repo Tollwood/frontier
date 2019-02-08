@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
-    public delegate void OnPlayerChanged(GameObject player);
-    public OnPlayerChanged PlayerChanged;
-
     public vThirdPersonCamera cam;
     public GameObject playerWithCameraPrefab;
     public Transform container;
@@ -30,6 +27,8 @@ public class PlayerManager : Singleton<PlayerManager>
             GameObject go = Instantiate(playerWithCameraPrefab, playerPositions[i], Quaternion.identity, container);
             go.name = playerNames[i];
             players[i] = go;
+            players[i].GetComponent<vThirdPersonInput>().enabled = false;
+            players[i].GetComponent<vThirdPersonController>().enabled = false;
             inventoryIds[i] = inventoryManager.AddInventory(10, playerNames[i]).Id;
             equipmentPositions[i] = go.GetComponent<EquipmentPositions>();
         }
@@ -53,6 +52,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void SwitchPlayer()
     {
+        int previousIndex = currentIndex;
         int newPlayerIndex;
         if (currentIndex == players.Length - 1)
             newPlayerIndex = 0;
@@ -64,12 +64,14 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void SwitchPlayer(int index)
     {
-        //Destroy(players[currentPlayer].GetComponent<vThirdPersonInput>());
-        //Destroy(players[currentPlayer].GetComponent<vThirdPersonController>());
-        cam.target = players[index].transform;
-        PlayerChanged?.Invoke(players[currentIndex]);
-        players[currentIndex].AddComponent<vThirdPersonInput>();
-        players[currentIndex].AddComponent<vThirdPersonController>();
+
+        players[currentIndex].GetComponent<vThirdPersonInput>().enabled = false;
+        players[currentIndex].GetComponent<vThirdPersonController>().enabled = false;
+        cam.SetMainTarget(players[index].transform);
+        EventManager.TriggerEvent(Events.OnPlayerChanged,players[index]);
+        players[index].GetComponent<vThirdPersonInput>().enabled = true;
+        players[index].GetComponent<vThirdPersonController>().enabled = true;
+        currentIndex = index;
     }
 
 }

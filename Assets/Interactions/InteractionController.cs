@@ -12,8 +12,8 @@ public class InteractionController : MonoBehaviour
 
     private void Start()
     {
-        InventoryManager.Instance.OnOpenInventoryCallback += OnOpenInventory;
-        InventoryManager.Instance.OnCloseInventoryCallback += OnCloseInventory;
+        EventManager.StartListening(Events.OnOpenInventory, OnOpenInventory);
+        EventManager.StartListening(Events.OnCloseInventory, OnCloseInventory);
         hint = GameObject.FindGameObjectWithTag("hint").GetComponent<TextMeshProUGUI>();
     }
 

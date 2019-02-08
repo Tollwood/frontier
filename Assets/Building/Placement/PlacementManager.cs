@@ -2,9 +2,7 @@
 
 public class PlacementManager : MonoBehaviour
 {
-
-    private float planningOffset = 4000f;
-
+    private float planningOffset = 1000f;
 
     [Header("Rotation Settings")]
     public KeyCode rotateLeftKey = KeyCode.Q;
@@ -45,7 +43,6 @@ public class PlacementManager : MonoBehaviour
     {
         if (!isBuilding)
         {
-
             isBuilding = true;
             cam = GameObject.FindGameObjectWithTag("planningModeCamera").GetComponent<Camera>();
             newBuilding = Instantiate(buildingPrefab, this.transform);
@@ -57,37 +54,40 @@ public class PlacementManager : MonoBehaviour
         }
     }
 
-    public void AbortBuilding()
-    {
-        isBuilding = false;
-        placed = false;
-        Destroy(newBuilding);
-    }
-
     public void Confirm()
     {
         if (placed)
         {
-            Ray ray = new Ray(new Vector3(newBuilding.transform.position.x - planningOffset, 3000, newBuilding.transform.position.z), Vector3.down);
-            RaycastHit hit;
-
-            if(Physics.Raycast(ray,out hit))
-            {
-                GameObject go = Instantiate(buildingPrefab, hit.point, newBuilding.transform.rotation);
-                go.AddComponent<MeshCollider>();
-            }
-
-            newBuilding.transform.parent = null;
-            Destroy(newBuilding.GetComponent<CollidingCheck>());
-            Destroy(newBuilding.GetComponent<Rigidbody>());
-            MeshCollider collider = newBuilding.AddComponent<MeshCollider>();
-            collider.convex = true;
-            collider.isTrigger = true;
-
-            isBuilding = false;
-            placed = false;
-            newBuilding = null;
+            GameObject go = Instantiate(buildingPrefab, GetPositionForBuilding(), newBuilding.transform.rotation);
+            go.AddComponent<MeshCollider>();
+            PlaceBuildingOnMap();
+            ClosePlanningMode();
         }
+    }
+
+    private void ClosePlanningMode()
+    {
+        isBuilding = false;
+        placed = false;
+        newBuilding = null;
+        EventManager.TriggerEvent(Events.StopPlanningMode);
+    }
+
+    private void PlaceBuildingOnMap()
+    {
+        newBuilding.transform.parent = null;
+        Destroy(newBuilding.GetComponent<CollidingCheck>());
+        Destroy(newBuilding.GetComponent<Rigidbody>());
+        MeshCollider newBuildingCollider = newBuilding.AddComponent<MeshCollider>();
+        newBuildingCollider.convex = true;
+        newBuildingCollider.isTrigger = true;
+    }
+
+    private Vector3 GetPositionForBuilding()
+    {
+        Vector3 pos = newBuilding.transform.position + new Vector3(-1 * planningOffset, 0, 0);
+        float height = TerrainModificationManager.Instance.GetHeight(pos);
+        return new Vector3(pos.x, height, pos.z);
     }
 
     private void Update()
@@ -122,10 +122,10 @@ public class PlacementManager : MonoBehaviour
 
     }
 
-    private void ApplyMaterial(MeshRenderer renderer, Material mat)
+    private void ApplyMaterial(MeshRenderer meshRenderer, Material mat)
     {
-        renderer.material = mat;
-        MeshRenderer[] renderes = renderer.gameObject.GetComponentsInChildren<MeshRenderer>();
+        meshRenderer.material = mat;
+        MeshRenderer[] renderes = meshRenderer.gameObject.GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer rend in renderes)
         {
             rend.material = mat;
@@ -147,7 +147,7 @@ public class PlacementManager : MonoBehaviour
 
     private void FollowMouse()
     {
-        var v3 = Input.mousePosition;
+        Vector3 v3 = Input.mousePosition;
         v3.z = 0;
         v3 = cam.ScreenToWorldPoint(v3);
         buildingToPlace.position = new Vector3(v3.x, 0f, v3.z);
