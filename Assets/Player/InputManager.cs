@@ -34,7 +34,7 @@ public class InputManager: Singleton<InputManager>
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && primaryActionEnabled)
+        if (Input.GetMouseButton(0) && primaryActionEnabled)
             EventManager.TriggerEvent(Events.OnExecutePrimaryAction); ;
 
         if (Input.GetKeyDown(inventoryKeyCode))

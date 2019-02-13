@@ -152,4 +152,10 @@ public class PlacementManager : MonoBehaviour
         v3 = cam.ScreenToWorldPoint(v3);
         buildingToPlace.position = new Vector3(v3.x, 0f, v3.z);
     }
+
+    public void OnPolePlaced(System.Object obj)
+    {
+        Transform position = (Transform)obj;
+        Debug.Log("OnCreatePole: " + position);
+    }
 }

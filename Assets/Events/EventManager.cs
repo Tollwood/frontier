@@ -6,7 +6,7 @@ public class EventManager : MonoBehaviour
 {
 
     [System.Serializable]
-    public class OneArgEvent : UnityEvent<System.Object> { }
+    public class OneArgEvent : UnityEvent< System.Object> { }
 
     private Dictionary<Events, UnityEvent> noArgEventDictionary;
     private Dictionary<Events, OneArgEvent> oneArgEventDictionary;

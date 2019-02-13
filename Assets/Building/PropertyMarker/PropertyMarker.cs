@@ -78,7 +78,7 @@ public class PropertyMarker : MonoBehaviour
             meshHeight = ((minhHeight + maxHeight) / 2) + heightOffset;
             BuildMesh();
         }
-
+        EventManager.TriggerEvent(Events.OnCreatePole, newPosition);
     }
 
     public void OnIncreaseHeight()
@@ -163,6 +163,7 @@ public class PropertyMarker : MonoBehaviour
                 minhHeight = v.y;
             }
         }
+        minhHeight += .1f;
     }
 }
 

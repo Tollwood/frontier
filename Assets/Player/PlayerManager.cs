@@ -64,7 +64,6 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void SwitchPlayer(int index)
     {
-
         players[currentIndex].GetComponent<vThirdPersonInput>().enabled = false;
         players[currentIndex].GetComponent<vThirdPersonController>().enabled = false;
         cam.SetMainTarget(players[index].transform);

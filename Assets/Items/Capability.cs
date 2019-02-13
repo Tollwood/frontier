@@ -1,1 +1,3 @@
-﻿public enum Capability{ None, Digging, PropertyMarking }
+﻿public enum Capability{ None, Digging, PropertyMarking,
+    Plowing
+}
