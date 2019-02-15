@@ -9,5 +9,7 @@
     OnItemUnEquip,
     StartPlanningMode,
     StopPlanningMode,
-    OnCreatePole
+    OnCreatePole,
+    OnSave,
+    OnLoad
 }

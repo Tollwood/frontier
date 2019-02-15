@@ -4,74 +4,93 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
-    public vThirdPersonCamera cam;
-    public GameObject playerWithCameraPrefab;
     public Transform container;
-    public Vector3[] playerPositions;
-    public string[] playerNames;
-    private string[] inventoryIds;
-    private EquipmentPositions[] equipmentPositions;
+    public GameObject playerWithCameraPrefab;
 
     private GameObject[] players;
-    private int currentIndex;
+    private readonly string FILE_NAME = "playerManager";
+    private InventoryManager inventoryManager;
+
+    [SerializeField]
+    public PlayerManagerData pmd;
+
+    public vThirdPersonCamera cam;
 
     // Start is called before the first frame update
     void Start()
     {
-        InventoryManager inventoryManager = InventoryManager.Instance;
-        players = new GameObject[playerPositions.Length];
-        inventoryIds = new string[playerPositions.Length];
-        equipmentPositions = new EquipmentPositions[playerPositions.Length];
-        for (int i = 0; i< playerPositions.Length; i++)
+        inventoryManager = InventoryManager.Instance;
+        EventManager.StartListening(Events.OnSave, onSave);
+        EventManager.StartListening(Events.OnLoad, onLoad);
+        Load(pmd);
+    }
+
+    private void Load(PlayerManagerData data)
+    {
+        players = new GameObject[data.players.Length];
+
+        for (int i = 0; i < data.players.Length; i++)
         {
-            GameObject go = Instantiate(playerWithCameraPrefab, playerPositions[i], Quaternion.identity, container);
-            go.name = playerNames[i];
+            PlayerData playerData = data.players[i];
+            GameObject go = Instantiate(playerWithCameraPrefab, playerData.position.ToVector3(), Quaternion.identity, container);
+            go.name = playerData.name;
             players[i] = go;
             players[i].GetComponent<vThirdPersonInput>().enabled = false;
             players[i].GetComponent<vThirdPersonController>().enabled = false;
-            inventoryIds[i] = inventoryManager.AddInventory(10, playerNames[i]).Id;
-            equipmentPositions[i] = go.GetComponent<EquipmentPositions>();
+            if(data.players[i].inventoryId != null)
+                data.players[i].inventoryId = inventoryManager.AddInventory(10, playerData.name).Id;
         }
-        SwitchPlayer(0);
+        SwitchPlayer(data.currentPlayerIndex);
     }
 
     internal EquipmentPositions GetEquipmentPositions()
     {
-        return equipmentPositions[currentIndex];
+        return players[pmd.currentPlayerIndex].GetComponent< EquipmentPositions>();
     }
 
     internal Inventory GetCurrentInventory()
     {
-        return InventoryManager.Instance.GetInventory(inventoryIds[currentIndex]);
+        return InventoryManager.Instance.GetInventory(pmd.players[pmd.currentPlayerIndex].inventoryId);
     }
 
     internal GameObject CurrentPlayer()
     {
-        return players[currentIndex];
+        return players[pmd.currentPlayerIndex];
     }
 
     public void SwitchPlayer()
     {
-        int previousIndex = currentIndex;
+        int previousIndex = pmd.currentPlayerIndex;
         int newPlayerIndex;
-        if (currentIndex == players.Length - 1)
+        if (pmd.currentPlayerIndex == players.Length - 1)
             newPlayerIndex = 0;
         else
-            newPlayerIndex = currentIndex + 1;
+            newPlayerIndex = pmd.currentPlayerIndex + 1;
 
         SwitchPlayer(newPlayerIndex);
     }
 
     public void SwitchPlayer(int index)
     {
-        players[currentIndex].GetComponent<vThirdPersonInput>().enabled = false;
-        players[currentIndex].GetComponent<vThirdPersonController>().enabled = false;
+        players[pmd.currentPlayerIndex].GetComponent<vThirdPersonInput>().enabled = false;
+        players[pmd.currentPlayerIndex].GetComponent<vThirdPersonController>().enabled = false;
         cam.SetMainTarget(players[index].transform);
         EventManager.TriggerEvent(Events.OnPlayerChanged,players[index]);
         players[index].GetComponent<vThirdPersonInput>().enabled = true;
         players[index].GetComponent<vThirdPersonController>().enabled = true;
-        currentIndex = index;
+        pmd.currentPlayerIndex = index;
     }
 
+    public void onSave()
+    {
+        SaveManager.Save(FILE_NAME, pmd);
+    }
+
+
+    public void onLoad()
+    {
+        pmd = SaveManager.Load(FILE_NAME);
+        // recreate players on load
+    }
 }
     

@@ -34,9 +34,11 @@ public class PlacementManager : MonoBehaviour
 
     GameObject newBuilding;
 
+    TerrainModificationManager terrainModificationManager;
     private void Start()
     {
         transform.parent.transform.position = new Vector3(planningOffset,0,0);
+        terrainModificationManager = FindObjectOfType<TerrainModificationManager>();
     }
 
     public void StartBuilding()
@@ -86,7 +88,8 @@ public class PlacementManager : MonoBehaviour
     private Vector3 GetPositionForBuilding()
     {
         Vector3 pos = newBuilding.transform.position + new Vector3(-1 * planningOffset, 0, 0);
-        float height = TerrainModificationManager.Instance.GetHeight(pos);
+
+        float height = Terrain.activeTerrain.SampleHeight(pos);
         return new Vector3(pos.x, height, pos.z);
     }
 

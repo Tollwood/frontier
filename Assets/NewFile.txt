@@ -1,0 +1,66 @@
+﻿Frontier:
+
+https://www.habrador.com/tutorials/math/8-convex-hull/
+https://www.habrador.com/tutorials/math/10-triangulation/
+
+
+https://faculty.chass.ncsu.edu/slatta/cowboys/essays/front_life2.htm
+
+
+Their efforts were aided by improvements in transportation, communication, farm equipment, and other areas.
+
+
+three major economic activities that transformed the region: mining, ranching, and farming
+
+initially skipped over most of the West, migrating instead to fertile valleys in California and Oregon by a variety of land and sea routes.
+rich ore deposits spurred new migrations to a variety of places, including Pikes Peak in Colorado  the Comstock Lode in Nevada, and the Black Hills of South Dakota.
+
+Miners required food, equipment, clothing, services, and entertainment, so businesses competed to provide them. Miners needed pack animals as well as meat, so ranchers also benefited. For example, some ambitious Oregonians drove cattle south to the California gold mines.
+
+Improvements in transportation. As more Americans pushed westward, new technologies assisted them. Before the 1850's, most people traveled westward by boat or wagon. These methods proved slow and expensive, and they provided limited access to western lands. The railroad, or "iron horse," became a vital new travel option, especially after the 1860’
+
+
+Towns vied to attract rail routes.  ship wheat, corn, cattle, sheep, mining ore, and other products more quickly and cheaply
+
+Tourism: In the 1880's, for example, wealthy easterners began travel west to spend time on a ranch
+
+Communication:
+ In April 1860, a mail service called the pony express  Transcontinental telegraph service was established in 1861. By about 1900, however, the recently invented telephone had begun to cause a decline in telegraph use.
+
+
+dry farming: 
+
+In 1837, John Deere, an Illinois blacksmith, developed a more effective plow by incorporating steel into the moldboard, the curved part of a plow t
+
+
+
+
+Improvements in farming further stimulated western settlement. Harsh conditions in the West forced immigrant farmers to find new ways of farming. Unpredictable rainfall and thick, grass-covered sod presented challenges. Pioneers began dry farming on the Great Plains, meaning they grew crops without irrigation in relatively dry regions (see Dry farming). By plowing soil deep and frequently, farmers could raise crops in lands previously thought unproductive. Inventors helped find ways to make it easier to plow, plant, and harvest crops in tough prairie sod and heavy, sticky soil. In 1837, John Deere, an Illinois blacksmith, developed a more effective plow by incorporating steel into the moldboard, the curved part of a plow that turns the soil to one side. Cyrus McCormick's new mechanical reaper harvested grain more efficiently than did hand methods. In 1858, Lewis Miller patented a mowing machine that permitted farmers to gather grain into bundles, again improving efficiency. Horses, mules, and oxen provided the power for plowing, hauling, and other farm chores. Tractors and trucks would not appear until the 1900’s.
+
+
+
+
+Farmers needed seeds, equipment, household goods, animal feed, and credit. Thus small towns began to dot the western landscape as retail businesses and banks arose to serve the growing population. Social centers, including churches, schools, and saloons, grew as well. By the late 1800's, the West had become a patchwork of farms, ranches, and towns amid vast open spaces. 
+
+
+https://www.autodesk.com/developer-network/platform-technologies/fbx-converter-archives
+
+
+
+Collect wood
+Craft to pole
+Mark Property you want to build on using pole
+Add / remove Poles
+
+Select height for property
+Raise & lower ground
+Place build
+Provide resources
+build
+
+
+
+10x10 meter * 1000 
+
+Real height map
+http://earthexplorer.usgs.gov/ tollwood  Usgs10_5wesg3234

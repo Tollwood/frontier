@@ -10,20 +10,21 @@ public class TerrainModificationUi : MonoBehaviour
     public TextMeshProUGUI desiredHeight;
 
     private bool isActive = false;
+    TerrainModificationManager terrainModificationManager;
 
     private void Start()
     {
         EventManager.StartListening(Events.OnItemEquip, OnEquip);
         EventManager.StartListening(Events.OnItemUnEquip, OnUnEquip);
-
+        terrainModificationManager = FindObjectOfType<TerrainModificationManager>();
     }
 
     private void Update()
     {
         if (!isActive)
             return;
-        currentHeight.text = TerrainModificationManager.Instance.CurrentHeightInMeter() + "m";
-        desiredHeight.text = TerrainModificationManager.Instance.DesiredHeightInMeter() + "m";
+        currentHeight.text = terrainModificationManager.CurrentHeightInMeter() + "m";
+        desiredHeight.text = terrainModificationManager.DesiredHeightInMeter() + "m";
     }
 
     public void OnEquip(System.Object obj)
@@ -38,7 +39,7 @@ public class TerrainModificationUi : MonoBehaviour
         }
     }
 
-    public void OnUnEquip(System.Object obj)
+    public void OnUnEquip(object obj)
     {
         Equipment equipment = (Equipment)obj;
         if (equipment.capabiltiy == Capability.Digging)

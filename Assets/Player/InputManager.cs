@@ -9,6 +9,8 @@ public class InputManager: Singleton<InputManager>
     public KeyCode switchPlayer = KeyCode.Tab;
     public KeyCode increaseHeightKey = KeyCode.Plus;
     public KeyCode decreaseHeightKey = KeyCode.Minus;
+    public KeyCode saveKey = KeyCode.F5;
+    public KeyCode loadKey = KeyCode.F6;
 
     private PlanningManager planningManager;
     private InteractionController interactionController;
@@ -51,7 +53,10 @@ public class InputManager: Singleton<InputManager>
             EventManager.TriggerEvent(Events.OnIncrease); 
         if (Input.GetKeyDown(decreaseHeightKey))
             EventManager.TriggerEvent(Events.OnDecrease);
-
+        if (Input.GetKeyDown(saveKey))
+            EventManager.TriggerEvent(Events.OnSave);
+        if (Input.GetKeyDown(loadKey))
+            EventManager.TriggerEvent(Events.OnLoad);
 
 
     }

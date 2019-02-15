@@ -1,56 +1,20 @@
-﻿using UnityEngine;
+﻿
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-public class EventManager : MonoBehaviour
+public static class EventManager 
 {
 
     [System.Serializable]
-    public class OneArgEvent : UnityEvent< System.Object> { }
+    public class OneArgEvent : UnityEvent<object> { }
 
-    private Dictionary<Events, UnityEvent> noArgEventDictionary;
-    private Dictionary<Events, OneArgEvent> oneArgEventDictionary;
+    private static Dictionary<Events, UnityEvent> noArgEventDictionary = new Dictionary<Events, UnityEvent>();
+    private static Dictionary<Events, OneArgEvent> oneArgEventDictionary = new Dictionary<Events, OneArgEvent>();
 
-    private static EventManager eventManager;
-
-    public static EventManager instance
-    {
-        get
-        {
-            if (!eventManager)
-            {
-                eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
-
-                if (!eventManager)
-                {
-                    Debug.LogError("There needs to be one active EventManger script on a GameObject in your scene.");
-                }
-                else
-                {
-                    eventManager.Init();
-                }
-            }
-
-            return eventManager;
-        }
-    }
-
-    void Init()
-    {
-        if (noArgEventDictionary == null)
-        {
-            noArgEventDictionary = new Dictionary<Events, UnityEvent>();
-        }
-        if (oneArgEventDictionary == null)
-        {
-            oneArgEventDictionary = new Dictionary<Events, OneArgEvent>();
-        }
-    }
-
+      
     public static void StartListening(Events eventName, UnityAction listener)
     {
-        UnityEvent thisEvent = null;
-        if (instance.noArgEventDictionary.TryGetValue(eventName, out thisEvent))
+        if (noArgEventDictionary.TryGetValue(eventName, out UnityEvent thisEvent))
         {
             thisEvent.AddListener(listener);
         }
@@ -58,15 +22,14 @@ public class EventManager : MonoBehaviour
         {
             thisEvent = new UnityEvent();
             thisEvent.AddListener(listener);
-            instance.noArgEventDictionary.Add(eventName, thisEvent);
+            noArgEventDictionary.Add(eventName, thisEvent);
         }
     }
 
     public static void StopListening(Events eventName, UnityAction listener)
     {
-        if (eventManager == null) return;
-        UnityEvent thisEvent = null;
-        if (instance.noArgEventDictionary.TryGetValue(eventName, out thisEvent))
+
+        if (noArgEventDictionary.TryGetValue(eventName, out UnityEvent thisEvent))
         {
             thisEvent.RemoveListener(listener);
         }
@@ -74,17 +37,15 @@ public class EventManager : MonoBehaviour
 
     public static void TriggerEvent(Events eventName)
     {
-        UnityEvent thisEvent = null;
-        if (instance.noArgEventDictionary.TryGetValue(eventName, out thisEvent))
+        if (noArgEventDictionary.TryGetValue(eventName, out UnityEvent thisEvent))
         {
             thisEvent.Invoke();
         }
     }
 
-    public static void StartListening(Events eventName, UnityAction<System.Object> listener)
+    public static void StartListening(Events eventName, UnityAction<object> listener)
     {
-        OneArgEvent thisEvent = null;
-        if (instance.oneArgEventDictionary.TryGetValue(eventName, out thisEvent))
+        if (oneArgEventDictionary.TryGetValue(eventName, out OneArgEvent thisEvent))
         {
             thisEvent.AddListener(listener);
         }
@@ -92,24 +53,21 @@ public class EventManager : MonoBehaviour
         {
             thisEvent = new OneArgEvent();
             thisEvent.AddListener(listener);
-            instance.oneArgEventDictionary.Add(eventName, thisEvent);
+            oneArgEventDictionary.Add(eventName, thisEvent);
         }
     }
 
-    public static void StopListening(Events eventName, UnityAction<System.Object> listener)
+    public static void StopListening(Events eventName, UnityAction<object> listener)
     {
-        if (eventManager == null) return;
-        OneArgEvent thisEvent = null;
-        if (instance.oneArgEventDictionary.TryGetValue(eventName, out thisEvent))
+        if (oneArgEventDictionary.TryGetValue(eventName, out OneArgEvent thisEvent))
         {
             thisEvent.RemoveListener(listener);
         }
     }
 
-    public static void TriggerEvent(Events eventName, System.Object arg1)
+    public static void TriggerEvent(Events eventName, object arg1)
     {
-        OneArgEvent thisEvent = null;
-        if (instance.oneArgEventDictionary.TryGetValue(eventName, out thisEvent))
+        if (oneArgEventDictionary.TryGetValue(eventName, out OneArgEvent thisEvent))
         {
             thisEvent.Invoke(arg1);
         }

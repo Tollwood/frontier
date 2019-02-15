@@ -1,3 +1,4 @@
 ﻿public enum Capability{ None, Digging, PropertyMarking,
-    Plowing
+    Plowing,
+    Planting
 }

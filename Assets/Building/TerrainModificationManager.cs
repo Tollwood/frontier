@@ -1,13 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-public class TerrainModificationManager : Singleton<TerrainModificationManager>
-{
+public class TerrainModificationManager : AbstractPrimaryActionManager {
     Terrain terr; // terrain to modify
     int hmWidth; // heightmap width
     int hmHeight; // heightmap height
-
-    Vector2 coordInTerrrain;
 
     public int size = 5; // the diameter of terrain portion that will raise under the game object
     public float desiredHeight = 0;
@@ -17,7 +14,6 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
     public bool raiseLevel = true;
     public bool lowerLevel = true;
     private bool canModifyTerrain = false;
-    private GameObject currentPlayer;
 
     void Start()
     {
@@ -25,27 +21,13 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
         terr = Terrain.activeTerrain;
         hmWidth = terr.terrainData.heightmapWidth;
         hmHeight = terr.terrainData.heightmapHeight;
-        EventManager.StartListening(Events.OnPlayerChanged, OnPlayerChanged);
 
-       EventManager.StartListening(Events.OnItemEquip, ActivateDigging);
-       EventManager.StartListening(Events.OnItemUnEquip, DeactivateDigging);
     }
 
     void Update()
     {
         if (!canModifyTerrain)
             return;
-        UpdateCurrentHeight();
-    }
-
-    private void UpdateCurrentHeight()
-    {
-        if (currentPlayer == null)
-        {
-            currentPlayer = PlayerManager.Instance.CurrentPlayer();
-        }
-
-        coordInTerrrain = GetCoordInTerrain(currentPlayer.transform.position);
         currentHeight = CurrentHeight();
     }
 
@@ -61,15 +43,58 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
         return new Vector2((int)(coord.x * hmWidth), (int)(coord.z * hmHeight));
     }
 
-    public float GetHeight(Vector3 position)
+    private float CurrentHeight()
     {
-        //Vector2 coord = GetCoordInTerrain(position);
-        //return terr.terrainData.GetHeights((int)coord.x, (int)coord.y, 1, 1)[0, 0];
-        return terr.SampleHeight(position);
+        Vector2 coordInTerrrain = GetCoordInTerrain(player.position);
+        return terr.terrainData.GetHeights((int)coordInTerrrain.x, (int)coordInTerrrain.y, 1, 1)[0, 0];
     }
 
+    public float CurrentHeightInMeter()
+    {
+        return toMeter(CurrentHeight());
+    }
 
-    private void dig()
+    internal  float DesiredHeightInMeter()
+    {
+        return toMeter(desiredHeight);
+    }
+
+    private float toMeter(float height)
+    {
+        return (float)Math.Round(Convert.ToDouble(height * 1000), 2);
+    }
+
+    protected override void ActivatePrimaryAction(object obj)
+    {
+        base.ActivatePrimaryAction(obj);
+        Equipment equipment = (Equipment)obj;
+        if (equipment.capabiltiy == GetCapability())
+        {
+            canModifyTerrain = true;
+            EventManager.StartListening(Events.OnIncrease, increaseDesiredHeight);
+            EventManager.StartListening(Events.OnDecrease, decreaseDesiredHeight);
+            currentHeight = CurrentHeight();
+            desiredHeight = CurrentHeight();
+        }
+    }
+
+    protected override void DeactivatePrimaryAction(object obj)
+    {
+        base.DeactivatePrimaryAction(obj);
+        Equipment equipment = (Equipment)obj;
+        if (equipment.capabiltiy == GetCapability())
+        {
+            canModifyTerrain = false;
+            EventManager.StopListening(Events.OnIncrease, increaseDesiredHeight);
+            EventManager.StopListening(Events.OnDecrease, decreaseDesiredHeight);
+        }
+    }
+
+    public void increaseDesiredHeight(){desiredHeight += increment;}
+
+    public void decreaseDesiredHeight(){desiredHeight = Mathf.Clamp(increment,0,desiredHeight);}
+
+    protected override void ExecutePrimaryAction()
     {
         if (canModifyTerrain)
         {
@@ -78,6 +103,7 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
             int offset = size / 2;
 
             // get the heights of the terrain under this game object
+            Vector2 coordInTerrrain = GetCoordInTerrain(player.position);
             float[,] heights = terr.terrainData.GetHeights((int)coordInTerrrain.x - offset, (int)coordInTerrrain.y - offset, size, size);
 
             // we set each sample of the terrain in the size to the desired height
@@ -103,67 +129,8 @@ public class TerrainModificationManager : Singleton<TerrainModificationManager>
         }
     }
 
-    private float CurrentHeight()
+    protected override Capability GetCapability()
     {
-        return terr.terrainData.GetHeights((int)coordInTerrrain.x, (int)coordInTerrrain.y, 1, 1)[0, 0];
-    }
-
-    public float CurrentHeightInMeter()
-    {
-        return toMeter(CurrentHeight());
-    }
-
-    internal float DesiredHeightInMeter()
-    {
-        return toMeter(desiredHeight);
-    }
-
-    private float toMeter(float height)
-    {
-        return (float)Math.Round(Convert.ToDouble(height * 1000), 2);
-    }
-
-    public void ActivateDigging(System.Object obj)
-    {
-        Equipment equipment = (Equipment)obj;
-        if (equipment.capabiltiy == Capability.Digging)
-        {
-            canModifyTerrain = true;
-            EventManager.StartListening(Events.OnExecutePrimaryAction, dig);
-            EventManager.StartListening(Events.OnIncrease, increaseDesiredHeight);
-            EventManager.StartListening(Events.OnDecrease, decreaseDesiredHeight);
-            UpdateCurrentHeight();
-            desiredHeight = CurrentHeight();
-        }
-    }
-
-    public void DeactivateDigging(System.Object obj)
-    {
-        Equipment equipment = (Equipment)obj;
-        if (equipment.capabiltiy == Capability.Digging)
-        {
-            canModifyTerrain = false;
-            EventManager.StopListening(Events.OnExecutePrimaryAction, dig); 
-            EventManager.StopListening(Events.OnIncrease, increaseDesiredHeight);
-            EventManager.StopListening(Events.OnDecrease, decreaseDesiredHeight);
-        }
- 
-    }
-
-    public void OnPlayerChanged(System.Object player)
-    {
-        this.currentPlayer = (GameObject)player;
-        // update canModifyTerrain according to currentPlayer
-    }
-
-
-    public void increaseDesiredHeight()
-    {
-        desiredHeight += increment;
-    }
-
-    public void decreaseDesiredHeight()
-    {
-        desiredHeight = Mathf.Clamp(increment,0,desiredHeight);
+        return Capability.Digging;
     }
 }

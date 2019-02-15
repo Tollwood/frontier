@@ -5,16 +5,15 @@ public class InteractionController : MonoBehaviour
 {
     public Camera cam;
     public float distance = 10f;
-    private TextMeshProUGUI hint;
+    public TextMeshProUGUI hint;
     private Interactable interactable;
 
     private bool interacting = true;
 
     private void Start()
     {
-        EventManager.StartListening(Events.OnOpenInventory, OnOpenInventory);
-        EventManager.StartListening(Events.OnCloseInventory, OnCloseInventory);
-        hint = GameObject.FindGameObjectWithTag("hint").GetComponent<TextMeshProUGUI>();
+        EventManager.StartListening(Events.OnOpenInventory, () => interacting = false);
+        EventManager.StartListening(Events.OnCloseInventory, () => interacting = true);
     }
 
     void Update()
@@ -34,12 +33,10 @@ public class InteractionController : MonoBehaviour
     private Interactable RayCastInteractable()
     {
         if (!interacting)
-        {
-            return null;
-        }
-        RaycastHit hit;
+           return null;
+
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, distance))
+        if (Physics.Raycast(ray, out RaycastHit hit, distance))
         {
             return hit.collider.transform.GetComponent<Interactable>();
         }
@@ -51,15 +48,5 @@ public class InteractionController : MonoBehaviour
         {
             interactable.Interact();
         }
-    }
-
-    public void OnOpenInventory()
-    {
-        interacting = false;
-    }
-
-    public void OnCloseInventory()
-    {
-        interacting = true;
     }
 }
