@@ -1,6 +1,6 @@
 ﻿public class PickUpItem : Interactable
 {
-    public Item item;
+    public StackItem item;
 
     PlayerManager playerManager;
 
@@ -16,8 +16,7 @@
 
     public override void Interact()
     {
-        Inventory playerInventory = playerManager.GetCurrentInventory();
-        bool pickedUp = playerInventory.Add(item);
+        bool pickedUp = InventoryManager.Instance.AddToCurrentInventtory(item);
         if (pickedUp)
         {
             Destroy(transform.gameObject);

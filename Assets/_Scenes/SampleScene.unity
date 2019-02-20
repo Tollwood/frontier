@@ -1916,11 +1916,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   space: 5
   initialItems:
-  - {fileID: 11400000, guid: b6c2f3fa0adaa4320b7c602d3db10bd3, type: 2}
-  - {fileID: 11400000, guid: 4edc1d85b21f9489a938d573cd9d6c5e, type: 2}
-  - {fileID: 11400000, guid: 2d3cf6e4d043f41cc931fa3108fc8dbc, type: 2}
-  - {fileID: 11400000, guid: 5ada1d7d6f25146b1befd69ad269a16a, type: 2}
-  - {fileID: 11400000, guid: ef869215752384a3fae59bef6e29cd96, type: 2}
+  - amount: 1
+    name: Axe
+  - amount: 1
+    name: Hammer
+  - amount: 1
+    name: Revolver
+  - amount: 1
+    name: Shovel
+  - amount: 5
+    name: Wood
 --- !u!65 &895082718
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2772,31 +2777,31 @@ MonoBehaviour:
     type: 3}
   pmd:
     players:
-    - name: Max
+    - id: 
+      name: Max
       position:
         x: 0
         y: 0
         z: 0
-      inventoryId: 
-    - name: Kathrin
+    - id: 
+      name: Kathrin
       position:
         x: 0
         y: 0
         z: 10
-      inventoryId: 
-    - name: Felix
+    - id: 
+      name: Felix
       position:
         x: 10
         y: 0
         z: 0
-      inventoryId: 
-    - name: Jon
+    - id: 
+      name: Jon
       position:
         x: 10
         y: 0
         z: 10
-      inventoryId: 
-    currentIndex: 0
+    currentPlayerIndex: 0
   cam: {fileID: 1427657694}
 --- !u!114 &2028097779
 MonoBehaviour:
@@ -2810,9 +2815,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5208992d98f644db3acc61bb4565e9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightHand:
-    equipment: {fileID: 0}
-    type: 0
 --- !u!114 &2028097780
 MonoBehaviour:
   m_ObjectHideFlags: 0

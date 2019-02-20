@@ -1,21 +1,22 @@
 ﻿using UnityEngine;
 
+[System.Serializable]
 public class Inventory
 {
     public string name = "Inventory";
     public string Id { get; private set; }
     public int space;  // Amount of item spaces
-    public Item[] items;
+    public StackItem[] items;
 
     public Inventory(string id, int space, string name)
     {
         this.Id = id;
         this.space = space;
         this.name = name;
-        this.items = new Item[space];
+        this.items = new StackItem[space];
     }
 
-    public bool Add(Item item)
+    public bool Add(StackItem item)
     {
         int? freeIndex = GetIndex(item);
         if (freeIndex == null)
@@ -26,9 +27,9 @@ public class Inventory
         return Add(item, freeIndex.Value);
     }
 
-    public bool Add(Item item, int index) {
-        Item inventoryItem = items[index];
-        if (item.SameIcon(inventoryItem))
+    public bool Add(StackItem item, int index) {
+        StackItem inventoryItem = items[index];
+        if (item.SameItem(inventoryItem))
         {
             inventoryItem.amount += item.amount;
         }
@@ -44,16 +45,16 @@ public class Inventory
         return true;
     }
 
-    private int? GetIndex(Item item)
+    private int? GetIndex(StackItem item)
     {
         int? emptyIndex = null;
         for (int index = 0; index < items.Length; index++) {
-            Item inventoryItem = items[index];
+            StackItem inventoryItem = items[index];
             if (emptyIndex == null && inventoryItem == null)
             {
                 emptyIndex = index;
             }
-            if( item.SameIcon(inventoryItem))
+            if( item.SameItem(inventoryItem))
                 return index;
         }
         return emptyIndex;
@@ -71,7 +72,7 @@ public class Inventory
 
     public bool SwapItem(int fromIndex, int toIndex)
     {
-        Item tmpItem = items[toIndex];
+        StackItem tmpItem = items[toIndex];
         items[toIndex] = items[fromIndex];
         items[fromIndex] = tmpItem;
         return true;

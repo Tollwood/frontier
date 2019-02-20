@@ -45,7 +45,7 @@ public class TerrainModificationManager : AbstractPrimaryActionManager {
 
     private float CurrentHeight()
     {
-        Vector2 coordInTerrrain = GetCoordInTerrain(player.position);
+        Vector2 coordInTerrrain = GetCoordInTerrain(currentPlayer().position);
         return terr.terrainData.GetHeights((int)coordInTerrrain.x, (int)coordInTerrrain.y, 1, 1)[0, 0];
     }
 
@@ -103,7 +103,7 @@ public class TerrainModificationManager : AbstractPrimaryActionManager {
             int offset = size / 2;
 
             // get the heights of the terrain under this game object
-            Vector2 coordInTerrrain = GetCoordInTerrain(player.position);
+            Vector2 coordInTerrrain = GetCoordInTerrain(currentPlayer().position);
             float[,] heights = terr.terrainData.GetHeights((int)coordInTerrrain.x - offset, (int)coordInTerrrain.y - offset, size, size);
 
             // we set each sample of the terrain in the size to the desired height

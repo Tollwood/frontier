@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryManager : Singleton<InventoryManager>
@@ -9,18 +8,56 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public bool isOpen { get; private set; } = false;
 
-    private Dictionary<string, Inventory> inventories = new Dictionary<string, Inventory>();
+    private readonly string FILE_NAME = "inventoryManager";
+
+    private InventeryManagmentData imd;
+
+    internal bool AddToCurrentInventtory(StackItem item)
+    {
+        return GetCurrentInventory().Add(item);
+    }
+
+    private void Awake()
+    {
+        imd = new InventeryManagmentData();
+    }
 
     private void Start()
     {
         primaryInventoryUi = GameObject.FindWithTag("primaryInventoryUi").GetComponent<InventoryUi>();
         secondaryInventoryUi = GameObject.FindWithTag("secondaryInventoryUi").GetComponent<InventoryUi>();
+        EventManager.StartListening(Events.NewPlayer, OnNewPlayer);
+        EventManager.StartListening(Events.OnPlayerChanged, OnPlayerChanged);
+        EventManager.StartListening(Events.OnSave, onSave);
+        EventManager.StartListening(Events.OnLoad, onLoad);
     }
+
+    public void OnPlayerChanged(object obj)
+    {
+        imd.currentPlayerId = ((PlayerData)obj).id;
+        CloseInventories();
+    }
+
+    public void OnNewPlayer(object obj)
+    {
+        PlayerData playerData = (PlayerData) obj;
+        if (!imd.inventories.TryGetValue(playerData.id, out Inventory inventory))
+        {
+            AddInventory(playerData.id ,10, playerData.name, null);
+        }
+    }
+
+
+    internal Inventory GetCurrentInventory()
+    {
+        return GetInventory(imd.currentPlayerId);
+    }
+
 
     internal void OpenInventories(string id)
     {
         isOpen = true;
-        primaryInventoryUi.OnOpenInventory(PlayerManager.Instance.GetCurrentInventory());
+        primaryInventoryUi.OnOpenInventory(GetCurrentInventory());
         secondaryInventoryUi.OnOpenInventory(GetInventory(id));
         EventManager.TriggerEvent(Events.OnOpenInventory);
     }
@@ -28,6 +65,7 @@ public class InventoryManager : Singleton<InventoryManager>
     internal void CloseInventories()
     {
         EventManager.TriggerEvent(Events.OnCloseInventory);
+        isOpen = false;
     }
 
     public void ToggleInventory()
@@ -35,7 +73,7 @@ public class InventoryManager : Singleton<InventoryManager>
         isOpen = !isOpen;
         if (isOpen)
         {
-            primaryInventoryUi.OnOpenInventory(PlayerManager.Instance.GetCurrentInventory());
+            primaryInventoryUi.OnOpenInventory(GetCurrentInventory());
             EventManager.TriggerEvent(Events.OnOpenInventory);
         }
         else
@@ -47,10 +85,13 @@ public class InventoryManager : Singleton<InventoryManager>
     internal Inventory AddInventory(int space, string inventoryName) {
         return AddInventory(space, inventoryName, null);
     }
-
-    internal Inventory AddInventory(int space, string inventoryName, Item[] items)
+    internal Inventory AddInventory(int space, string inventoryName, StackItem[] items)
     {
-        string id = Guid.NewGuid().ToString();
+       return AddInventory(Guid.NewGuid().ToString(), space, inventoryName, items);
+    }
+
+    internal Inventory AddInventory( string id, int space, string inventoryName, StackItem[] items)
+    {
         Inventory inventory = new Inventory(id, space, inventoryName);
         if(items != null && items.Length == space)
         {
@@ -59,7 +100,7 @@ public class InventoryManager : Singleton<InventoryManager>
                 inventory.items[i] = items[i];
             }
         }
-        inventories.Add(id, inventory);
+        imd.inventories.Add(id, inventory);
         return inventory;
     }
 
@@ -80,8 +121,16 @@ public class InventoryManager : Singleton<InventoryManager>
 
     internal Inventory GetInventory(string id)
     {
-        inventories.TryGetValue(id, out Inventory inventory);
+        imd.inventories.TryGetValue(id, out Inventory inventory);
         return inventory;
     }
 
+    private void onLoad()
+    {
+        imd = SaveManager.Load<InventeryManagmentData>(FILE_NAME);
+    }
+    private void onSave()
+    {
+        SaveManager.Save(FILE_NAME, imd);
+    }
 }

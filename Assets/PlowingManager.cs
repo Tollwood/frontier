@@ -18,7 +18,7 @@ public class PlowingManager : AbstractPrimaryActionManager
 
     protected override void ExecutePrimaryAction()
     {
-        Vector3 WorldPos = player.position + player.forward;
+        Vector3 WorldPos = currentPlayer().position + currentPlayer().forward;
 
         // calculate which splat map cell the worldPos falls within (ignoring y)
         int mapX = (int)(((WorldPos.x - terrainPos.x) / terrainData.size.x) * terrainData.alphamapWidth);

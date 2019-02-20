@@ -1,20 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public abstract class AbstractPrimaryActionManager : MonoBehaviour
 {
-    protected Transform player;
+
+    private int currentIndex = 0;
 
     private void Awake()
     {
-        EventManager.StartListening(Events.OnPlayerChanged, (object obj) => player = ((GameObject)obj).transform);
         EventManager.StartListening(Events.OnItemEquip, ActivatePrimaryAction);
         EventManager.StartListening(Events.OnItemUnEquip, DeactivatePrimaryAction);
     }
 
-    protected void OnPlayerChanged(System.Object player)
+    protected void OnPlayerChanged(object currentIndex)
     {
-        this.player = ((GameObject)player).transform;
-        // update canPlant according to currentPlayer
+        this.currentIndex = (int)currentIndex; 
     }
 
     protected abstract void ExecutePrimaryAction();
@@ -37,5 +37,8 @@ public abstract class AbstractPrimaryActionManager : MonoBehaviour
         }
     }
 
-
+    protected Transform currentPlayer()
+    {
+        return PlayerManager.Instance.CurrentPlayer().transform;
+    }
 }

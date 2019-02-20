@@ -5,10 +5,8 @@
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
 [System.Serializable]
 public class Item : ScriptableObject {
-
-    public new string name = "New Item";    // Name of the item
+    
     public Sprite icon = null;              // Item icon
-    public int amount;
     public Capability capabiltiy = Capability.None;
 
     public Item Clone()
@@ -16,8 +14,7 @@ public class Item : ScriptableObject {
         Item clonedItem = new Item
         {
             name = this.name,
-            icon = this.icon,
-            amount = this.amount
+            icon = this.icon
         };
         return clonedItem;
     } 

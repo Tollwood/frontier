@@ -19,38 +19,44 @@ public class PlayerManager : Singleton<PlayerManager>
     // Start is called before the first frame update
     void Start()
     {
-        inventoryManager = InventoryManager.Instance;
         EventManager.StartListening(Events.OnSave, onSave);
         EventManager.StartListening(Events.OnLoad, onLoad);
-        Load(pmd);
+        Load(pmd, true);
     }
 
-    private void Load(PlayerManagerData data)
+    private void Load(PlayerManagerData data, bool isNew = false)
     {
+        pmd = data;
+        DestroyCurrentPlayers();
         players = new GameObject[data.players.Length];
-
         for (int i = 0; i < data.players.Length; i++)
         {
-            PlayerData playerData = data.players[i];
-            GameObject go = Instantiate(playerWithCameraPrefab, playerData.position.ToVector3(), Quaternion.identity, container);
-            go.name = playerData.name;
-            players[i] = go;
-            players[i].GetComponent<vThirdPersonInput>().enabled = false;
-            players[i].GetComponent<vThirdPersonController>().enabled = false;
-            if(data.players[i].inventoryId != null)
-                data.players[i].inventoryId = inventoryManager.AddInventory(10, playerData.name).Id;
+            players[i] = AddPlayer(data.players[i]);
         }
         SwitchPlayer(data.currentPlayerIndex);
     }
 
-    internal EquipmentPositions GetEquipmentPositions()
+    private GameObject AddPlayer(PlayerData playerData)
     {
-        return players[pmd.currentPlayerIndex].GetComponent< EquipmentPositions>();
+        GameObject go = Instantiate(playerWithCameraPrefab, playerData.position.ToVector3(), Quaternion.identity, container);
+        go.name = playerData.name;
+        if (playerData.id == "")
+        {
+            playerData.id = Guid.NewGuid().ToString();
+            EventManager.TriggerEvent(Events.NewPlayer, playerData);
+        }
+        return go;
     }
 
-    internal Inventory GetCurrentInventory()
+    private void DestroyCurrentPlayers()
     {
-        return InventoryManager.Instance.GetInventory(pmd.players[pmd.currentPlayerIndex].inventoryId);
+        if (players != null)
+        {
+            foreach (GameObject go in players)
+            {
+                Destroy(go);
+            }
+        }
     }
 
     internal GameObject CurrentPlayer()
@@ -75,7 +81,7 @@ public class PlayerManager : Singleton<PlayerManager>
         players[pmd.currentPlayerIndex].GetComponent<vThirdPersonInput>().enabled = false;
         players[pmd.currentPlayerIndex].GetComponent<vThirdPersonController>().enabled = false;
         cam.SetMainTarget(players[index].transform);
-        EventManager.TriggerEvent(Events.OnPlayerChanged,players[index]);
+        EventManager.TriggerEvent(Events.OnPlayerChanged,pmd.players[index]);
         players[index].GetComponent<vThirdPersonInput>().enabled = true;
         players[index].GetComponent<vThirdPersonController>().enabled = true;
         pmd.currentPlayerIndex = index;
@@ -83,14 +89,17 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void onSave()
     {
+        for(int i = 0; i < players.Length; i++)
+        {
+            pmd.players[i].position.x = players[i].transform.position.x;
+            pmd.players[i].position.y = players[i].transform.position.y;
+            pmd.players[i].position.z = players[i].transform.position.z;
+        }
         SaveManager.Save(FILE_NAME, pmd);
     }
 
-
     public void onLoad()
     {
-        pmd = SaveManager.Load(FILE_NAME);
-        // recreate players on load
+        Load(SaveManager.Load<PlayerManagerData>(FILE_NAME));
     }
 }
-    

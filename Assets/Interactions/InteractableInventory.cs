@@ -3,7 +3,7 @@
 public class InteractableInventory : Interactable
 {
     public int space;
-    public Item[] initialItems;
+    public StackItem[] initialItems;
 
     private Inventory inventory;
 

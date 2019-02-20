@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14a45e27a0040429c9ada3ed99999452, type: 3}
-  m_Name: Axe
+  m_Name: PlantItem
   m_EditorClassIdentifier: 
-  name: Axe
-  icon: {fileID: 21300000, guid: dc148f9c15576d9499ca1b6e89e41f82, type: 3}
-  amount: 1
-  capabiltiy: 3
+  name: Planting
+  icon: {fileID: 21300000, guid: 45927dd63603f4d618a6e1aa27d5211f, type: 3}
+  capabiltiy: 4
   type: 0
-  Prefab: {fileID: 1691237590736490, guid: af154e6854047a74dafe7cf7441e81f0, type: 3}
-  Position: {x: -0.016, y: -0.007, z: 0.147}
-  Rotation: {x: 180, y: 0, z: 0}
+  Prefab: {fileID: 3580775219487732005, guid: 4f05582e2afc3409da25a4a52fceeb03, type: 3}
+  Position: {x: 0, y: 0, z: 0}
+  Rotation: {x: 0, y: 0, z: 0}

@@ -13,9 +13,8 @@ public class CollectableResource : Interactable
 
     public override void Interact()
     {
-        Item collectedItems = item.Clone();
-        collectedItems.amount = minAmount;
-        bool added = PlayerManager.Instance.GetCurrentInventory().Add(collectedItems);
+        StackItem collectedItems = new StackItem(item.name, minAmount);
+        bool added = InventoryManager.Instance.AddToCurrentInventtory(collectedItems);
         if (added)
         {
             totalAmount -= minAmount;

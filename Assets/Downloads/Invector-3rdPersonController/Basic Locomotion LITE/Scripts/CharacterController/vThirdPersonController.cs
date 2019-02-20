@@ -5,6 +5,12 @@ namespace Invector.CharacterController
 {
     public class vThirdPersonController : vThirdPersonAnimator
     {
+
+        private void Awake()
+        {
+            this.enabled = false;
+        }
+
         public virtual void Sprint(bool value)
         {                                   
             isSprinting = value;            

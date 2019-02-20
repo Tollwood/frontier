@@ -19,15 +19,16 @@ public class InventorySlot : MonoBehaviour
         this.name = inventory.name + "-slot-" + index;
         this.inventory = inventory;
         this.index = index;
-        item = inventory.items[index];
-        if ( item== null)
+        StackItem stackItem = inventory.items[index];
+        if (stackItem == null)
         {
             return;
         }
-        if(item.amount > 1)
+        item = Resources.Load<Item>(stackItem.name);
+        if (stackItem.amount > 1)
         {
             amountText.gameObject.SetActive(true);
-            amountText.text = item.amount + "";
+            amountText.text = stackItem.amount + "";
         }
         icon.sprite = item.icon;
         icon.gameObject.SetActive(true);

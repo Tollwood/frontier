@@ -11,5 +11,6 @@
     StopPlanningMode,
     OnCreatePole,
     OnSave,
-    OnLoad
+    OnLoad,
+    NewPlayer
 }

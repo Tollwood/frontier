@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14a45e27a0040429c9ada3ed99999452, type: 3}
-  m_Name: Revolver
+  m_Name: Shovel
   m_EditorClassIdentifier: 
-  name: Revolver
-  icon: {fileID: 21300000, guid: 571b87d2e3bab45cbafccaacba78848c, type: 3}
-  amount: 1
-  Prefab: {fileID: 727463166, guid: b7397f0e5e8a547cdaafeeec766272f1, type: 3}
-  Position: {x: 0.013, y: -0.018, z: -0.06}
-  Rotation: {x: 180, y: -66.4, z: 90}
+  name: Shovel
+  icon: {fileID: 21300000, guid: 3b6cef9d7d7ea4ae59450979b32fd04a, type: 3}
+  capabiltiy: 1
+  type: 0
+  Prefab: {fileID: 1000010209671850, guid: 6b30f59df335b6543afa70edc9687614, type: 3}
+  Position: {x: 0, y: 0, z: -0.708}
+  Rotation: {x: 0, y: 0, z: 0}
