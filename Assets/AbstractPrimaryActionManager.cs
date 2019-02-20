@@ -3,10 +3,11 @@ using UnityEngine;
 
 public abstract class AbstractPrimaryActionManager : MonoBehaviour
 {
+    protected Equipment equipedItem;
 
     private int currentIndex = 0;
 
-    private void Awake()
+    public virtual void Awake()
     {
         EventManager.StartListening(Events.OnItemEquip, ActivatePrimaryAction);
         EventManager.StartListening(Events.OnItemUnEquip, DeactivatePrimaryAction);
@@ -26,6 +27,7 @@ public abstract class AbstractPrimaryActionManager : MonoBehaviour
         if (((Equipment)obj).capabiltiy == GetCapability())
         {
             EventManager.StartListening(Events.OnExecutePrimaryAction, ExecutePrimaryAction);
+            equipedItem = (Equipment)obj;
         }
     }
 
@@ -34,6 +36,7 @@ public abstract class AbstractPrimaryActionManager : MonoBehaviour
         if (((Equipment)obj).capabiltiy == GetCapability())
         {
             EventManager.StopListening(Events.OnExecutePrimaryAction, ExecutePrimaryAction);
+            equipedItem = null;
         }
     }
 

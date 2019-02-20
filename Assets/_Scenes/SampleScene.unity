@@ -1914,7 +1914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd90ffdb25d043ab8b26c41763b59b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  space: 5
+  space: 6
   initialItems:
   - amount: 1
     name: Axe
@@ -1924,8 +1924,10 @@ MonoBehaviour:
     name: Revolver
   - amount: 1
     name: Shovel
-  - amount: 5
+  - amount: 1
     name: Wood
+  - amount: 1
+    name: PlantItem
 --- !u!65 &895082718
 BoxCollider:
   m_ObjectHideFlags: 0
