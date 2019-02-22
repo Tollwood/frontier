@@ -1927,7 +1927,7 @@ MonoBehaviour:
   - amount: 1
     name: Wood
   - amount: 1
-    name: PlantItem
+    name: cornSeed
 --- !u!65 &895082718
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2706,7 +2706,7 @@ GameObject:
   - component: {fileID: 2028097780}
   - component: {fileID: 2028097781}
   - component: {fileID: 2028097783}
-  - component: {fileID: 2028097784}
+  - component: {fileID: 2028097782}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2849,6 +2849,18 @@ MonoBehaviour:
   increment: 0.0001
   raiseLevel: 1
   lowerLevel: 1
+--- !u!114 &2028097782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028097774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed7eaf7beef1144b2b7f087282a07794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2028097783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2863,18 +2875,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textureIndex: 1
   size: 1
---- !u!114 &2028097784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028097774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed7eaf7beef1144b2b7f087282a07794, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2041872642
 GameObject:
   m_ObjectHideFlags: 0

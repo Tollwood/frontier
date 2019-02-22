@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3aad4d854a42438e87c4444cd68f6e9, type: 3}
+  m_Name: cornMedium
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 4500524214943679790, guid: f18e121846b1548b581f8509ccbc8879, type: 3}
+  harvestable: 1
+  timeToLife: 10
+  nextPlant: {fileID: 11400000, guid: 3edfc4e227e874483a0343e8e799e491, type: 2}
