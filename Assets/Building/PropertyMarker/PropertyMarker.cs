@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class PropertyMarker : MonoBehaviour
 {
-
     public GameObject polePrefab;
     public GameObject messageBoardPrefab;
+    public Material meshMaterial;
 
     public int maxPoles = 4;
 
     private List<GameObject> poles = new List<GameObject>();
-    private MeshFilter meshFilter;
+    private List<GameObject> polesOnMap = new List<GameObject>();
+    private List<PropertyMesh> properties = new List<PropertyMesh>();
+
     private float increment = .2f;
 
     public float heightOffset { get; private set; } = 0f;
@@ -21,12 +21,15 @@ public class PropertyMarker : MonoBehaviour
     private float minhHeight = 0f;
     private float maxHeight = 100f;
     public float poleHeight = 1.4f;
+    public float minDistance = 1f;
 
     private void Awake()
     {
-        meshFilter = GetComponent<MeshFilter>();
+        GameObject go =  new GameObject();
+        go.transform.parent = this.transform;
+        PropertyMesh pm =  go.AddComponent<PropertyMesh>();
+        properties.Add(pm);
     }
-
     private void Start()
     {
         EventManager.StartListening(Events.OnItemEquip, ActivatePropertyMarking);
@@ -58,87 +61,74 @@ public class PropertyMarker : MonoBehaviour
 
     public void AddPole()
     {
+
         Transform playerTransform = PlayerManager.Instance.CurrentPlayer().transform;
         Vector3 newPosition = playerTransform.position + (playerTransform.forward * 0.5f);
+        if (WithinMinDistance(newPosition))
+        {
+            return;
+        }
 
         if (poles.Count == maxPoles)
         {
             poles.ForEach((GameObject obj) => Destroy(obj));
             poles.Clear();
-            meshFilter.mesh = null;
+            polesOnMap.ForEach((GameObject obj) => Destroy(obj));
+            polesOnMap.Clear();
+            properties.ForEach((PropertyMesh obj) => obj.Reset());
+
         }
 
-        GameObject pole =  Instantiate(polePrefab, newPosition, Quaternion.identity,this.transform);
-        poles.Add(pole);
-        if(poles.Count == maxPoles)
+        poles.Add(Instantiate(polePrefab, newPosition, Quaternion.identity, this.transform));
+        // with offSet
+        polesOnMap.Add(Instantiate(polePrefab, newPosition + new Vector3(PlacementManager.planningOffsetX,0,0), Quaternion.identity, FindObjectOfType<PlanningManager>().transform.parent));
+
+        if (poles.Count == maxPoles)
         {
             List<Vector3> polesPositions = poles.Select((arg) => { return arg.transform.position; }).ToList();
-            SetHighestPoleAsMinHeight(polesPositions);
-            SetLowestPoleAsMaxHeight(polesPositions);
-            meshHeight = ((minhHeight + maxHeight) / 2) + heightOffset;
-            BuildMesh();
+
+            properties.ForEach((PropertyMesh pm) => pm.BuildMesh(polesPositions, CalcMeshHeight(polesPositions),meshMaterial));
+            // BuildMesh(polesOnMap);
         }
         EventManager.TriggerEvent(Events.OnCreatePole, newPosition);
+    }
+
+    private bool WithinMinDistance(Vector3 newPosition)
+    {
+        foreach(GameObject pole in poles)
+        {
+            if(Vector3.Distance(newPosition,pole.transform.position)< minDistance)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void OnIncreaseHeight()
     {
         meshHeight = Mathf.Clamp(meshHeight + increment, minhHeight, maxHeight);
-        BuildMesh();
+        List<Vector3> polesPositions = poles.Select((arg) => { return arg.transform.position; }).ToList();
+        properties.ForEach((PropertyMesh pm) => pm.BuildMesh(polesPositions, meshHeight, meshMaterial));
     }
 
     public void OnDecreaseHeight()
     {
         meshHeight = Mathf.Clamp(meshHeight - increment, minhHeight, maxHeight);
-        BuildMesh();
-    }
-
-
-    private void BuildMesh()
-    {
-        List<Vector3> vertices = CreateVertices();
-        // add height
-        Mesh mesh = new Mesh();
-        meshFilter.mesh = mesh;
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = CreateTriangles(vertices); ;
-
-    }
-
-    private int[] CreateTriangles(List<Vector3> convexHullpoints)
-    {
-        int[] triangles = new int[(poles.Count - 2) * 3 * 2];
-
-        int index = 0;
-        for (int i = 2; i < convexHullpoints.Count; i++)
-        {
-            triangles[index] = 0;
-            triangles[index+1] = i-1;
-            triangles[index+2] = i;
-            index += 3;
-        }
-
-        for (int i = 2; i < convexHullpoints.Count; i++)
-        {
-            triangles[index] = 0;
-            triangles[index + 1] = i;
-            triangles[index + 2] = i-1;
-            index += 3;
-        }
-        return triangles;
-    }
-
-    private List<Vector3> CreateVertices()
-    {
         List<Vector3> polesPositions = poles.Select((arg) => { return arg.transform.position; }).ToList();
-        List<Vector3> convexHull = JarvisMarchAlgorithm.GetConvexHull(polesPositions);
-
-        meshHeight = Mathf.Clamp(meshHeight, minhHeight, maxHeight);
-        return convexHull.Select((Vector3 convexHullElement) => {
-            convexHullElement.y = meshHeight;
-            return convexHullElement; 
-            }).ToList();
+        properties.ForEach((PropertyMesh pm) => pm.BuildMesh(polesPositions, meshHeight, meshMaterial));
     }
+
+
+    private float CalcMeshHeight(List<Vector3> polesPositions)
+    {
+        SetHighestPoleAsMinHeight(polesPositions);
+        SetLowestPoleAsMaxHeight(polesPositions);
+        meshHeight = ((minhHeight + maxHeight) / 2) + heightOffset;
+        Mathf.Clamp(meshHeight, minhHeight, maxHeight);
+        return meshHeight;
+    }
+
 
     private void SetLowestPoleAsMaxHeight(List<Vector3> convexHull)
     {

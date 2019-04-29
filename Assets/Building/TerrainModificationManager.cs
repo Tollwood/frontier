@@ -9,7 +9,7 @@ public class TerrainModificationManager : AbstractPrimaryActionManager {
     public int size = 5; // the diameter of terrain portion that will raise under the game object
     public float desiredHeight = 0;
     public float currentHeight = 0f;
-    public float increment = 0.02f;
+    public float increment = 0.05f;
 
     public bool raiseLevel = true;
     public bool lowerLevel = true;
@@ -61,7 +61,7 @@ public class TerrainModificationManager : AbstractPrimaryActionManager {
 
     private float toMeter(float height)
     {
-        return (float)Math.Round(Convert.ToDouble(height * 1000), 2);
+        return (float)Math.Round(Convert.ToDouble(height * 500), 2);
     }
 
     protected override void ActivatePrimaryAction(object obj)
@@ -74,7 +74,7 @@ public class TerrainModificationManager : AbstractPrimaryActionManager {
             EventManager.StartListening(Events.OnIncrease, increaseDesiredHeight);
             EventManager.StartListening(Events.OnDecrease, decreaseDesiredHeight);
             currentHeight = CurrentHeight();
-            desiredHeight = CurrentHeight();
+            desiredHeight = (float)Math.Round(Convert.ToDouble(CurrentHeight()), 2); ;
         }
     }
 

@@ -5,7 +5,7 @@ public class InputManager: Singleton<InputManager>
 {
     public KeyCode inventoryKeyCode = KeyCode.I;
     public KeyCode interactionKeyCode = KeyCode.E;
-    public KeyCode planningModeKey = KeyCode.M;
+    public KeyCode placementModeKey = KeyCode.M;
     public KeyCode switchPlayer = KeyCode.Tab;
     public KeyCode increaseHeightKey = KeyCode.Plus;
     public KeyCode decreaseHeightKey = KeyCode.Minus;
@@ -26,7 +26,7 @@ public class InputManager: Singleton<InputManager>
         EventManager.StartListening(Events.OnOpenInventory, () => primaryActionEnabled = false);
         EventManager.StartListening(Events.StartPlanningMode, () => primaryActionEnabled = false);
         EventManager.StartListening(Events.OnCloseInventory, () => primaryActionEnabled = true);
-        EventManager.StartListening(Events.StopPlanningMode, () => primaryActionEnabled = true);
+        EventManager.StartListening(Events.StopPlacementMode, () => primaryActionEnabled = true);
     }
 
     private void DisablePrimaryAction()
@@ -45,8 +45,8 @@ public class InputManager: Singleton<InputManager>
         if (Input.GetKeyDown(interactionKeyCode))
             interactionController.TriggerInteraction();
 
-        if (Input.GetKeyDown(planningModeKey))
-            EventManager.TriggerEvent(Events.StopPlanningMode);
+        if (Input.GetKeyDown(placementModeKey))
+            StopPlacementMode();
         if (Input.GetKeyDown(switchPlayer))
             PlayerManager.Instance.SwitchPlayer();
         if (Input.GetKeyDown(increaseHeightKey))
@@ -57,7 +57,10 @@ public class InputManager: Singleton<InputManager>
             EventManager.TriggerEvent(Events.OnSave);
         if (Input.GetKeyDown(loadKey))
             EventManager.TriggerEvent(Events.OnLoad);
+    }
 
-
+    public void StopPlacementMode()
+    {
+        EventManager.TriggerEvent(Events.StopPlacementMode);
     }
 }

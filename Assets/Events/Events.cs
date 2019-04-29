@@ -8,7 +8,7 @@
     OnItemEquip,
     OnItemUnEquip,
     StartPlanningMode,
-    StopPlanningMode,
+    StopPlacementMode,
     OnCreatePole,
     OnSave,
     OnLoad,

@@ -2,7 +2,7 @@
 
 public class PlacementManager : MonoBehaviour
 {
-    private float planningOffset = 1000f;
+    public static float planningOffsetX = 1000f;
 
     [Header("Rotation Settings")]
     public KeyCode rotateLeftKey = KeyCode.Q;
@@ -37,7 +37,7 @@ public class PlacementManager : MonoBehaviour
     TerrainModificationManager terrainModificationManager;
     private void Start()
     {
-        transform.parent.transform.position = new Vector3(planningOffset,0,0);
+        transform.parent.transform.position = new Vector3(planningOffsetX,0,0);
         terrainModificationManager = FindObjectOfType<TerrainModificationManager>();
     }
 
@@ -47,13 +47,18 @@ public class PlacementManager : MonoBehaviour
         {
             isBuilding = true;
             cam = GameObject.FindGameObjectWithTag("planningModeCamera").GetComponent<Camera>();
-            newBuilding = Instantiate(buildingPrefab, this.transform);
+            newBuilding = Instantiate(buildingPrefab, this.transform, this.transform.parent);
             collidingCheck = newBuilding.AddComponent<CollidingCheck>();
             buildingToPlace = newBuilding.transform;
             newBuilding.transform.localEulerAngles = Vector3.zero;
             buildingMeshRenderer = buildingToPlace.GetComponent<MeshRenderer>();
             Validate();
         }
+    }
+
+    public void StopPlacement()
+    {
+        InputManager.Instance.StopPlacementMode();
     }
 
     public void Confirm()
@@ -72,12 +77,12 @@ public class PlacementManager : MonoBehaviour
         isBuilding = false;
         placed = false;
         newBuilding = null;
-        EventManager.TriggerEvent(Events.StopPlanningMode);
+        EventManager.TriggerEvent(Events.StopPlacementMode);
     }
 
     private void PlaceBuildingOnMap()
     {
-        newBuilding.transform.parent = null;
+        newBuilding.transform.parent = this.transform.parent;
         Destroy(newBuilding.GetComponent<CollidingCheck>());
         Destroy(newBuilding.GetComponent<Rigidbody>());
         MeshCollider newBuildingCollider = newBuilding.AddComponent<MeshCollider>();
@@ -87,7 +92,7 @@ public class PlacementManager : MonoBehaviour
 
     private Vector3 GetPositionForBuilding()
     {
-        Vector3 pos = newBuilding.transform.position + new Vector3(-1 * planningOffset, 0, 0);
+        Vector3 pos = newBuilding.transform.position + new Vector3(-1 * planningOffsetX, 0, 0);
 
         float height = Terrain.activeTerrain.SampleHeight(pos);
         return new Vector3(pos.x, height, pos.z);

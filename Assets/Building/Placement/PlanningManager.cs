@@ -8,7 +8,7 @@ public class PlanningManager : MonoBehaviour
     private void Start()
     {
         EventManager.StartListening(Events.StartPlanningMode, () => TogglePlanning(true));
-        EventManager.StartListening(Events.StopPlanningMode, () => TogglePlanning(false));
+        EventManager.StartListening(Events.StopPlacementMode, () => TogglePlanning(false));
     }
 
     private void TogglePlanning(bool enable)

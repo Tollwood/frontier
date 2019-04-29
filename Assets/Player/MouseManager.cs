@@ -12,7 +12,7 @@ public class MouseManager: MonoBehaviour
         EventManager.StartListening(Events.OnOpenInventory, OnShowMouse);
         EventManager.StartListening(Events.OnCloseInventory, OnHideMouse);
         EventManager.StartListening(Events.StartPlanningMode, OnShowMouse);
-        EventManager.StartListening(Events.StopPlanningMode, OnHideMouse);
+        EventManager.StartListening(Events.StopPlacementMode, OnHideMouse);
     }
 
     void OnShowMouse() {
