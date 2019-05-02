@@ -28,6 +28,7 @@ public class PlacementManager : MonoBehaviour
     public Material validMaterial;
     public Material invalidMaterial;
     public Material placedMaterial;
+    public Material disolveMaterial;
 
     private bool isBuilding = false;
     private bool placed = false;
@@ -67,6 +68,9 @@ public class PlacementManager : MonoBehaviour
         {
             GameObject go = Instantiate(buildingPrefab, GetPositionForBuilding(), newBuilding.transform.rotation);
             go.AddComponent<MeshCollider>();
+            InteractableBuild ib = go.AddComponent<InteractableBuild>();
+            ib.disolveMaterial = disolveMaterial;
+            ib.Reset();
             PlaceBuildingOnMap();
             ClosePlanningMode();
         }

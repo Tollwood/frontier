@@ -56,11 +56,6 @@ public class PropertyMarker : MonoBehaviour
             return;
         }
 
-        if (property.IsMaxPoles())
-        {
-            property.Reset();
-        }
-
         property.AddMarker(polePrefab, newPosition);
 
         EventManager.TriggerEvent(Events.OnCreatePole, newPosition);

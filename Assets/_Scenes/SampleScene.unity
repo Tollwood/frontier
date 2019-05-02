@@ -469,7 +469,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 5933851989083910854, guid: ace04d0acb5a54a93aa4152ec29690b9,
+        type: 3}
+      propertyPath: properties.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5933851989083910854, guid: ace04d0acb5a54a93aa4152ec29690b9,
+        type: 3}
+      propertyPath: meshMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 83abeb719cccd4c47bd4e6d7b1a66b96, type: 2}
+    m_RemovedComponents:
+    - {fileID: 5933851989083910853, guid: ace04d0acb5a54a93aa4152ec29690b9, type: 3}
+    - {fileID: 5933851989083910852, guid: ace04d0acb5a54a93aa4152ec29690b9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ace04d0acb5a54a93aa4152ec29690b9, type: 3}
 --- !u!4 &300269613 stripped
 Transform:
@@ -2045,7 +2057,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4252945111077740, guid: 512aea1db35b12e4a94ee346b4dcac96, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4252945111077740, guid: 512aea1db35b12e4a94ee346b4dcac96, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3414,7 +3426,7 @@ Transform:
   - {fileID: 634546595}
   - {fileID: 110157915}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1914930866
 PrefabInstance:
@@ -3891,6 +3903,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlanningMode
       objectReference: {fileID: 0}
+    - target: {fileID: 3353029930245167158, guid: 18c99f58b6549428da797f2a9de18105,
+        type: 3}
+      propertyPath: planningOffset
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3353029930245167158, guid: 18c99f58b6549428da797f2a9de18105,
+        type: 3}
+      propertyPath: disolveMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 3631d33b6ddcb41b189617466f7f5510, type: 2}
     - target: {fileID: 3353029928908221133, guid: 18c99f58b6549428da797f2a9de18105,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3981,11 +4003,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3353029930245167158, guid: 18c99f58b6549428da797f2a9de18105,
-        type: 3}
-      propertyPath: planningOffset
-      value: 1000
-      objectReference: {fileID: 0}
     - target: {fileID: 3353029930017722992, guid: 18c99f58b6549428da797f2a9de18105,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3995,6 +4012,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: StopPlacement
+      objectReference: {fileID: 0}
+    - target: {fileID: 3353029930635084938, guid: 18c99f58b6549428da797f2a9de18105,
+        type: 3}
+      propertyPath: minSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3353029930635084938, guid: 18c99f58b6549428da797f2a9de18105,
+        type: 3}
+      propertyPath: maxSize
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18c99f58b6549428da797f2a9de18105, type: 3}

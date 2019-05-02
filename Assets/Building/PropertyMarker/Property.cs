@@ -47,18 +47,13 @@ public class Property : MonoBehaviour
         mapMesh.Reset();
     }
 
-    internal bool IsMaxPoles()
-    {
-        return poles.Count == maxPoles;
-    }
-
     internal void AddMarker(GameObject polePrefab, Vector3 newPosition)
     {
         poles.Add(Instantiate(polePrefab, newPosition, Quaternion.identity, this.transform));
         // with offSet
         polesOnMap.Add(Instantiate(polePrefab, newPosition + new Vector3(PlacementManager.planningOffsetX, 0, 0), Quaternion.identity, this.transform));
 
-        if (IsMaxPoles())
+        if (poles.Count >= 3)
         {
             List<Vector3> polesPositions = poles.Select((arg) => { return arg.transform.position; }).ToList();
 
