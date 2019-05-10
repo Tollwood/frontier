@@ -2,7 +2,7 @@
 
 public abstract class Interactable: MonoBehaviour {
 
-    public Sprite icon;
+    public Sprite icon { protected set; get; }
     public bool showHint = false;
     public new string name;
 

@@ -10,6 +10,7 @@ public class InteractableInventory : Interactable
     private void Start()
     {
         name = "inventory";
+        icon = IconManager.Instance.GetIcon(IconManager.INVENTORY_ICON);
         if(inventory == null)
         inventory = InventoryManager.Instance.AddInventory(space, name, initialItems);
 

@@ -3,7 +3,10 @@ using UnityEngine.UI;
 
 public class InteractableMenu : Interactable
 {
-
+    private void Start()
+    {
+        icon = IconManager.Instance.GetIcon(IconManager.CLOSE_ICON);
+    }
     private MenuAction[]  GetOptions()
     {
         Interactable[] interactables = GetComponentsInChildren<Interactable>();

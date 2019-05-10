@@ -4,11 +4,12 @@ using UnityEngine.UI;
 public class MouseManager: MonoBehaviour
 {
 
-    public Image crosshair;
+    public Crosshair crosshair;
     public new vThirdPersonCamera camera;
 
     private void Start()
     {
+        crosshair = FindObjectOfType<Crosshair>();
         EventManager.StartListening(Events.OnOpenInventory, OnShowMouse);
         EventManager.StartListening(Events.OnCloseInventory, OnHideMouse);
         EventManager.StartListening(Events.StartPlanningMode, OnShowMouse);

@@ -6,6 +6,7 @@ public class InteractablePullCart : Interactable
     private void Start()
     {
         name = "pull cart";
+        icon = IconManager.Instance.GetIcon(IconManager.CART_ICON);
     }
     public override void Interact()
     {
@@ -19,8 +20,7 @@ public class InteractablePullCart : Interactable
         joint.xMotion = ConfigurableJointMotion.Limited;
         joint.yMotion = ConfigurableJointMotion.Limited;
         joint.zMotion = ConfigurableJointMotion.Limited;
-        InteractableReleaseCart releaseCart = this.gameObject.AddComponent<InteractableReleaseCart>();
-        releaseCart.icon = this.icon;
+        this.gameObject.AddComponent<InteractableReleaseCart>();
         Destroy(this);
     }
 }
