@@ -13,13 +13,14 @@ public class MouseManager: MonoBehaviour
         EventManager.StartListening(Events.OnCloseInventory, OnHideMouse);
         EventManager.StartListening(Events.StartPlanningMode, OnShowMouse);
         EventManager.StartListening(Events.StopPlacementMode, OnHideMouse);
+        EventManager.StartListening(Events.OnOpenMenu, OnShowMouse);
+        EventManager.StartListening(Events.OnCloseMenu, OnHideMouse);
     }
 
     void OnShowMouse() {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         crosshair.gameObject.SetActive(false);
-        camera.lockCamera = true;
     }
 
     void OnHideMouse()
@@ -27,6 +28,5 @@ public class MouseManager: MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false; 
         crosshair.gameObject.SetActive(true);
-        camera.lockCamera = false;
     }
 }

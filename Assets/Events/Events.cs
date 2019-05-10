@@ -12,5 +12,7 @@
     OnCreatePole,
     OnSave,
     OnLoad,
-    NewPlayer
+    NewPlayer,
+    OnOpenMenu,
+    OnCloseMenu
 }

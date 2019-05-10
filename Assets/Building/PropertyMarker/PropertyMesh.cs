@@ -18,6 +18,10 @@ public class PropertyMesh : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
+    public void Remove()
+    {
+        meshFilter.mesh = new Mesh();
+    }
 
     public void BuildMesh(List<Vector3> polesPositions, float meshHeight, Material material)
     {
@@ -65,11 +69,6 @@ public class PropertyMesh : MonoBehaviour
             convexHullElement.y = meshHeight;
             return convexHullElement; 
             }).ToList();
-    }
-
-    internal void Reset()
-    {
-        meshFilter.mesh = null;
     }
 }
 

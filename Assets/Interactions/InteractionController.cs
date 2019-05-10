@@ -13,7 +13,9 @@ public class InteractionController : MonoBehaviour
     private void Start()
     {
         EventManager.StartListening(Events.OnOpenInventory, () => interacting = false);
+        EventManager.StartListening(Events.OnOpenMenu, () => interacting = false);
         EventManager.StartListening(Events.OnCloseInventory, () => interacting = true);
+        EventManager.StartListening(Events.OnCloseMenu, () => interacting = true);
     }
 
     void Update()
@@ -24,10 +26,12 @@ public class InteractionController : MonoBehaviour
 
     private void UpdateInteractionHint()
     {
-        if (interactable != null)
+        if (interactable != null && interactable.showHint)
             hint.text = interactable.hint();
-        else
+        else if (interacting) {
             hint.text = "";
+        }
+            
     }
 
     private Interactable RayCastInteractable()

@@ -43,27 +43,41 @@ public class Property : MonoBehaviour
         poles.Clear();
         polesOnMap.ForEach((GameObject obj) => Destroy(obj));
         polesOnMap.Clear();
-        playerModeMesh.Reset();
-        mapMesh.Reset();
+        playerModeMesh.Remove();
+        mapMesh.Remove();
     }
 
     internal void AddMarker(GameObject polePrefab, Vector3 newPosition)
     {
-        poles.Add(Instantiate(polePrefab, newPosition, Quaternion.identity, this.transform));
+        GameObject pole = Instantiate(polePrefab, newPosition, Quaternion.identity, this.transform);
+        Pole p = pole.GetComponent<Pole>();
+        p.property = this;
+        poles.Add(pole);
         // with offSet
         polesOnMap.Add(Instantiate(polePrefab, newPosition + new Vector3(PlacementManager.planningOffsetX, 0, 0), Quaternion.identity, this.transform));
+        DrawMesh();
 
-        if (poles.Count >= 3)
-        {
-            List<Vector3> polesPositions = poles.Select((arg) => { return arg.transform.position; }).ToList();
-
-            playerModeMesh.BuildMesh(polesPositions, CalcMeshHeight(polesPositions), material);
-            mapMesh.BuildMesh(polesOnMap.Select((arg) => { return arg.transform.position; }).ToList(), 10f, material);
-        }
 
     }
 
+    private void DrawMesh()
+    {
+        if (poles.Count >= 3) {
+            List<Vector3> polesPositions = poles.Select((arg) => { return arg.transform.position; }).ToList();
+            playerModeMesh.BuildMesh(polesPositions, CalcMeshHeight(polesPositions), material);
+            mapMesh.BuildMesh(polesOnMap.Select((arg) => { return arg.transform.position; }).ToList(), 10f, material);
+        }
+        else
+        {
+            mapMesh.Remove();
+        }
+    }
 
+    internal void removeMarker(GameObject marker)
+    {
+        poles.Remove(marker);
+        DrawMesh();
+    }
 
     private float CalcMeshHeight(List<Vector3> polesPositions)
     {

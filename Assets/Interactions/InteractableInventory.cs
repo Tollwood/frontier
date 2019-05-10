@@ -9,14 +9,12 @@ public class InteractableInventory : Interactable
 
     private void Start()
     {
+        name = "inventory";
         if(inventory == null)
         inventory = InventoryManager.Instance.AddInventory(space, name, initialItems);
 
     }
-    public override string hint()
-    {
-        return " Open " + inventory.name + " inventory";
-    }
+
 
     public override void Interact()
     {

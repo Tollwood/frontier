@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 
 public class PropertyMarker : MonoBehaviour
 {
@@ -57,7 +55,7 @@ public class PropertyMarker : MonoBehaviour
         }
 
         property.AddMarker(polePrefab, newPosition);
-
+        
         EventManager.TriggerEvent(Events.OnCreatePole, newPosition);
     }
 

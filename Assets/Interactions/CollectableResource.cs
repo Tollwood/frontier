@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-
+﻿
 public class CollectableResource : Interactable
 {
     public Item item;

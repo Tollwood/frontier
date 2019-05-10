@@ -169,12 +169,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 966434788}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c374bbbc0f8b44f12b7f6ad56d3202f2, type: 3}
+  m_Script: {fileID: 11500000, guid: 14996a571a1b04549a57f0407a1a2dfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  showHint: 1
   item: {fileID: 11400000, guid: 4daed4a20dba54e3fbdc5ff67047548d, type: 2}
-  totalAmount: 3
-  minAmount: 1
+  totalAmount: 6
+  minAmount: 2
 --- !u!1 &1118078545
 GameObject:
   m_ObjectHideFlags: 0
