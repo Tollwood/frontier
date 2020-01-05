@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a45e27a0040429c9ada3ed99999452, type: 3}
   m_Name: Axe
   m_EditorClassIdentifier: 
-  name: Axe
   icon: {fileID: 21300000, guid: dc148f9c15576d9499ca1b6e89e41f82, type: 3}
+  iconName: AXE_INVENTORY_ICON
   capabiltiy: 3
   type: 0
   Prefab: {fileID: 1691237590736490, guid: af154e6854047a74dafe7cf7441e81f0, type: 3}

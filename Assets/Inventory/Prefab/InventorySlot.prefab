@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.27450982, g: 0.40784317, b: 0.627451, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -143,6 +143,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 1701235731845034276}
   amountText: {fileID: 6273367648966936989}
+  inventory:
+    name: 
+    space: 0
+    items: []
 --- !u!222 &5214958020656449681
 CanvasRenderer:
   m_ObjectHideFlags: 0

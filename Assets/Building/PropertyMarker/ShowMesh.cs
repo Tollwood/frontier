@@ -1,18 +1,18 @@
-﻿public class RemovePole : Interactable
+﻿public class ShowMesh : Interactable
 {
 
     private void Start()
     {
-        icon = IconManager.Instance.GetIcon(IconManager.DELETE_ICON);
+        icon = IconManager.Instance.GetIcon(IconManager.SHOVEL_ICON);
     }
     public override string hint()
     {
-        return "Remove Pole";
+        return "Hide / Show plane";
     }
 
     public override void Interact()
     {
         Pole p = this.transform.parent.GetComponent<Pole>();
-        p.Remove(); 
+        p.property.ToggleShowMesh();
     }
 }

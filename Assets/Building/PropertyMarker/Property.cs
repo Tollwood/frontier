@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class Property : MonoBehaviour
 {
 
     PropertyMesh playerModeMesh;
+    private bool showMesh = false;
     PropertyMesh mapMesh;
 
     public int maxPoles = 4;
@@ -15,6 +17,13 @@ public class Property : MonoBehaviour
 
     public float heightOffset { get; private set; } = 0f;
     private float meshHeight = 0f;
+
+    internal void ToggleShowMesh()
+    {
+        showMesh = !showMesh;
+        DrawMesh();
+    }
+
     private float minhHeight = 0f;
     private float maxHeight = 100f;
     public float poleHeight = 1.4f;
@@ -28,10 +37,12 @@ public class Property : MonoBehaviour
     {
         GameObject go = new GameObject();
         go.transform.parent = this.transform;
+        go.name = "propertyMesh playerMode";
         playerModeMesh = go.AddComponent<PropertyMesh>();
 
         GameObject pmGo = new GameObject();
         pmGo.transform.parent = this.transform;
+        pmGo.name = "propertyMesh MapMode";
         mapMesh= pmGo.AddComponent<PropertyMesh>();
     }
 
@@ -54,7 +65,9 @@ public class Property : MonoBehaviour
         p.property = this;
         poles.Add(pole);
         // with offSet
-        polesOnMap.Add(Instantiate(polePrefab, newPosition + new Vector3(PlacementManager.planningOffsetX, 0, 0), Quaternion.identity, this.transform));
+        GameObject mapPole = Instantiate(polePrefab, newPosition + new Vector3(PlacementManager.planningOffsetX, 0, 0), Quaternion.identity, this.transform);
+        polesOnMap.Add(mapPole.gameObject);
+        p.mapPole = mapPole;
         DrawMesh();
 
 
@@ -62,7 +75,7 @@ public class Property : MonoBehaviour
 
     private void DrawMesh()
     {
-        if (poles.Count >= 3) {
+        if (poles.Count >= 3 && showMesh) {
             List<Vector3> polesPositions = poles.Select((arg) => { return arg.transform.position; }).ToList();
             playerModeMesh.BuildMesh(polesPositions, CalcMeshHeight(polesPositions), material);
             mapMesh.BuildMesh(polesOnMap.Select((arg) => { return arg.transform.position; }).ToList(), 10f, material);
@@ -70,12 +83,15 @@ public class Property : MonoBehaviour
         else
         {
             mapMesh.Remove();
+            playerModeMesh.Remove();
         }
     }
 
-    internal void removeMarker(GameObject marker)
+    internal void removeMarker(Pole pole)
     {
-        poles.Remove(marker);
+        polesOnMap.Remove(pole.mapPole.gameObject);
+        Destroy(pole.mapPole.gameObject);
+        poles.Remove(pole.gameObject);
         DrawMesh();
     }
 

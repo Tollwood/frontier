@@ -6,7 +6,7 @@ public class TerrainModificationManager : AbstractPrimaryActionManager {
     int hmWidth; // heightmap width
     int hmHeight; // heightmap height
 
-    public int size = 5; // the diameter of terrain portion that will raise under the game object
+    public int size = 1; // the diameter of terrain portion that will raise under the game object
     public float desiredHeight = 0;
     public float currentHeight = 0f;
     public float increment = 0.05f;
@@ -19,8 +19,8 @@ public class TerrainModificationManager : AbstractPrimaryActionManager {
     {
         //supports only one active terrain at at time
         terr = Terrain.activeTerrain;
-        hmWidth = terr.terrainData.heightmapWidth;
-        hmHeight = terr.terrainData.heightmapHeight;
+        hmWidth = terr.terrainData.heightmapResolution;
+        hmHeight = terr.terrainData.heightmapResolution;
 
     }
 

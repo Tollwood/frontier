@@ -43,7 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0806ec9fbfba048abad5e47d14178029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: a7084cd4e46af45898e3954ae57c7e75, type: 3}
+  showHint: 0
+  name: 
 --- !u!1 &2220280936046479488
 GameObject:
   m_ObjectHideFlags: 0
@@ -77,6 +78,7 @@ Transform:
   m_Children:
   - {fileID: 5033306165229104945}
   - {fileID: 7862881527534578406}
+  - {fileID: 4986732173055417948}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -151,7 +153,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0408bdff7461b4678b1102c2ecbb26c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 4ddaef5ad06934e31bc08b306ccc0db2, type: 3}
+  showHint: 0
+  name: 
   property: {fileID: 0}
 --- !u!1 &6535229948773661904
 GameObject:
@@ -196,4 +199,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32f0c3c1405544fe39cf860d798cc6f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: ca818bec7bf3944fab48a00a61228592, type: 3}
+  showHint: 0
+  name: 
+--- !u!1 &6881110681086891417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4986732173055417948}
+  - component: {fileID: 693489835991388470}
+  m_Layer: 0
+  m_Name: TogglePlane
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4986732173055417948
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6881110681086891417}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2220280936046479491}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &693489835991388470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6881110681086891417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f25bdf6543e7f45d998c5a801fcf2a5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showHint: 0
+  name: 

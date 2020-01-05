@@ -30,7 +30,9 @@ public class InventorySlot : MonoBehaviour
             amountText.gameObject.SetActive(true);
             amountText.text = stackItem.amount + "";
         }
-        icon.sprite = item.icon;
+
+        //icon.sprite = item.icon;
+        icon.sprite = IconManager.Instance.GetIconByFieldName(item.iconName);
         icon.gameObject.SetActive(true);
     }
 

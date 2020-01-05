@@ -20,7 +20,7 @@ public class PropertyMesh : MonoBehaviour
 
     public void Remove()
     {
-        meshFilter.mesh = new Mesh();
+        meshFilter.mesh = null;
     }
 
     public void BuildMesh(List<Vector3> polesPositions, float meshHeight, Material material)

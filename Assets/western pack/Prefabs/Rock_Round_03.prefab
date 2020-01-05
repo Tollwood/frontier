@@ -102,9 +102,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 41695244}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c374bbbc0f8b44f12b7f6ad56d3202f2, type: 3}
+  m_Script: {fileID: 11500000, guid: 14996a571a1b04549a57f0407a1a2dfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showHint: 1
+  name: Stone
   item: {fileID: 11400000, guid: 328dc19a85c1740cbbaa7f07bca66463, type: 2}
   totalAmount: 6
-  minAmount: 1
+  minAmount: 2

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: cornSeed
   m_EditorClassIdentifier: 
   icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  iconName: SEED_ICON
   capabiltiy: 4
   type: 0
   Prefab: {fileID: 3580775219487732005, guid: 4f05582e2afc3409da25a4a52fceeb03, type: 3}
